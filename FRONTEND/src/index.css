@@ -26,11 +26,11 @@
     --font-body: "Inter", sans-serif;
   }
   
-  h1 {
+  /* h1 {
     font-size: 2.5rem;
     font-family: var(--font-heading);
     color: var(--primary-color);
-  }
+  } */
   
   h2 {
     font-size: 2rem;
@@ -39,12 +39,16 @@
   }
   
   p {
-    font-size: 1rem;
     font-family: var(--font-body);
-    color: var(--text-primary);
   }
   span {
-    font-size: 2.5rem;
+    /* font-size: 2.5rem; */
     font-family: var(--font-heading);
     color: var(--secondary-color);
+  }
+  li:hover{
+    background:white;
+    border-radius: 15px;
+    padding-inline: 10px;
+    color: black;
   }
