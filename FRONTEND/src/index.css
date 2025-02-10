@@ -13,7 +13,8 @@
     --color-Button: #2f79ff;
     --color-Button-Hover: #2a52be;
     --color-Icon-bg: #2f79ff;
-    --color-Button-text: #0544ff
+    --color-Button-text: #0544ff;
+    --color-Gray: rgba(0, 0, 0, 0.3);
 
   }
 
@@ -26,11 +27,11 @@
     --font-body: "Inter", sans-serif;
   }
   
-  /* h1 {
-    font-size: 2.5rem;
+  h1 {
+    /* font-size: 2.5rem; */
     font-family: var(--font-heading);
     color: var(--primary-color);
-  } */
+  }
   
   h2 {
     font-size: 2rem;
@@ -52,3 +53,4 @@
     padding-inline: 10px;
     color: black;
   }
+  
