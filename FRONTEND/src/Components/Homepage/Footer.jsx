@@ -48,7 +48,7 @@ const Footer = () => {
         <hr className='opacity-30'/>
         <div className='flex lg:flex-row md:flex-row sm:flex-row flex-col gap-3  justify-between pt-3 mx-5'>
           <div>
-            <h1 className='md:text-md '>Huduma Mtaani &copy; 2025</h1>
+            <h1 className='md:text-md '>Huduma Mtaani &copy; {new Date().getFullYear()}</h1>
           </div>
           <div>
             <ul className='flex gap-4 md:text-md text-Sub-Headings '>
