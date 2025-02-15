@@ -34,7 +34,7 @@
   }
   
   h2 {
-    font-size: 2rem;
+    /* font-size: 2rem; */
     font-family: var(--font-heading);
     color: var(--secondary-color);
   }

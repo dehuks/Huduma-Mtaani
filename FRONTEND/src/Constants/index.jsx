@@ -1,7 +1,5 @@
-import { Cable } from "lucide-react";
-import { Wrench } from "lucide-react";
-import { Shirt } from "lucide-react";
-import { Bike } from "lucide-react";
+import { Cable, icons } from "lucide-react";
+import { Wrench,Shirt,Bike,Facebook,Instagram,Twitter,MapPin,Mail,Phone } from "lucide-react";
 
 
 import user1 from "../assets/images/profile-pictures/User1.png"
@@ -10,12 +8,7 @@ import user3 from "../assets/images/profile-pictures/User3.png";
 import user4 from "../assets/images/profile-pictures/User4.png";
 import user5 from "../assets/images/profile-pictures/User5.png";
 
-export const navItems = [
-  { label: "Features", href: "#" },
-  { label: "Workflow", href: "#" },
-  { label: "Pricing", href: "#" },
-  { label: "Testimonials", href: "#" },
-];
+
 
 
 
@@ -56,104 +49,46 @@ export const services = [
     icon: <Cable/>,
     title: "Electrician",
     description:
-      "Easily design and arrange your VR environments with a user-friendly drag-and-drop interface.",
+      "All Electrical services such as repairs, installations and maintenance.",
   },
   {
     icon: <Wrench />,
     title: "Plumber",
     description:
-      "Build VR applications that run seamlessly across multiple platforms, including mobile, desktop, and VR headsets.",
+      "All Electrical services such as repairs, installations and maintenance.",
   },
   {
     icon: <Shirt />,
     title: "MamaFua",
     description:
-      "Jumpstart your VR projects with a variety of built-in templates for different types of applications and environments.",
+      "All Electrical services such as repairs, installations and maintenance.",
   },
   {
     icon: <Bike />,
     title: "PageBoy",
     description:
-      "Preview your VR application in real-time as you make changes, allowing for quick iterations and adjustments.",
+      "All Electrical services such as repairs, installations and maintenance.",
   }
 ];
 
-export const checklistItems = [
-  {
-    title: "Code merge made easy",
-    description:
-      "Track the performance of your VR apps and gain insights into user behavior.",
-  },
-  {
-    title: "Review code without worry",
-    description:
-      "Track the performance of your VR apps and gain insights into user behavior.",
-  },
-  {
-    title: "AI Assistance to reduce time",
-    description:
-      "Track the performance of your VR apps and gain insights into user behavior.",
-  },
-  {
-    title: "Share work in minutes",
-    description:
-      "Track the performance of your VR apps and gain insights into user behavior.",
-  },
+
+
+export const GetInTouch = [
+  { icon: <MapPin size={18}/>, text: "Magadi Road" },
+  { icon: <Mail size={18}/>, text: "HudumaMtaani.co.ke" },
+  { icon: <Phone size={18}/>, text: "+254-712345678" },
 ];
 
-export const pricingOptions = [
-  {
-    title: "Free",
-    price: "$0",
-    features: [
-      "Private board sharing",
-      "5 Gb Storage",
-      "Web Analytics",
-      "Private Mode",
-    ],
-  },
-  {
-    title: "Pro",
-    price: "$10",
-    features: [
-      "Private board sharing",
-      "10 Gb Storage",
-      "Web Analytics (Advance)",
-      "Private Mode",
-    ],
-  },
-  {
-    title: "Enterprise",
-    price: "$200",
-    features: [
-      "Private board sharing",
-      "Unlimited Storage",
-      "High Performance Network",
-      "Private Mode",
-    ],
-  },
+export const QuickLinks = [
+  { href: "#", text: "Platform" },
+  { href: "#", text: "Plans & Pricing" },
+  { href: "#", text: "Become a Service Provider" },
 ];
 
-export const resourcesLinks = [
-  { href: "#", text: "Getting Started" },
-  { href: "#", text: "Documentation" },
-  { href: "#", text: "Tutorials" },
-  { href: "#", text: "API Reference" },
-  { href: "#", text: "Community Forums" },
-];
 
-export const platformLinks = [
-  { href: "#", text: "Features" },
-  { href: "#", text: "Supported Devices" },
-  { href: "#", text: "System Requirements" },
-  { href: "#", text: "Downloads" },
-  { href: "#", text: "Release Notes" },
-];
+export const socials = [
+  {icon: <Facebook size={18}/> },
+  {icon: <Instagram size={18}/>},
+  {icon: <Twitter size={18}/>},
 
-export const communityLinks = [
-  { href: "#", text: "Events" },
-  { href: "#", text: "Meetups" },
-  { href: "#", text: "Conferences" },
-  { href: "#", text: "Hackathons" },
-  { href: "#", text: "Jobs" },
 ];
