@@ -1,8 +1,39 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Menu, X } from "lucide-react"; // Import icons
+import Login from "../Auth/Login";
+import SignUp from "../Auth/SignUp";
 
 const NavBar = () => {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isLoginModalOpen, setLoginModalOpen] = useState(false);
+  const [isSignUpModalOpen, setSignUpModalOpen] = useState(false);
+
+  // Function to switch from Login to SignUp
+  const openSignUp = () => {
+    setLoginModalOpen(false);
+    setSignUpModalOpen(true);
+  };
+
+  // Function to switch from SignUp to Login
+  const openLogin = () => {
+    setSignUpModalOpen(false);
+    setLoginModalOpen(true);
+  };
+
+      // Handle body scroll when modal opens/closes
+      useEffect(() => {
+        if (isSignUpModalOpen || isLoginModalOpen) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = 'auto';
+        }
+
+        // Cleanup function
+        return () => {
+            document.body.style.overflow = 'auto';
+        };
+    }, [isSignUpModalOpen, isLoginModalOpen]);
+
 
   return (
     <div className="relative">
@@ -16,31 +47,48 @@ const NavBar = () => {
             <li>Home</li>
             <li>Services</li>
             <li>Contact</li>
-            <button className="bg-Placeholder px-3 py-1 rounded-xl">Join Us</button>
+            <button
+              className="bg-Placeholder px-3 py-1 rounded-xl"
+              onClick={() => setLoginModalOpen(true)}
+            >
+              Join Us
+            </button>
           </ul>
 
           {/* Hamburger Menu (Mobile) */}
           <button
             className="md:hidden text-white"
-            onClick={() => setIsOpen(!isOpen)}
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             aria-label="Toggle Menu"
           >
-            {isOpen ? <X size={28} /> : <Menu size={28} />}
+            {isMobileMenuOpen ? <X size={28} /> : <Menu size={28} />}
           </button>
         </div>
       </div>
 
       {/* Mobile Menu */}
-      {isOpen && (
-        <div className="md:hidden absolute top-16 z-99 right-4 bg-CTA-card rounded-lg p-4 shadow-lg w-48">
+      {isMobileMenuOpen && (
+        <div className="md:hidden absolute top-16 z-50 right-4 bg-CTA-card rounded-lg p-4 shadow-lg w-48">
           <ul className="flex flex-col gap-4 text-white">
             <li>Home</li>
             <li>Services</li>
             <li>Contact</li>
-            <button className="bg-Placeholder px-3 py-1 rounded-xl">Join Us</button>
+            <button
+              className="bg-Placeholder px-3 py-1 rounded-xl"
+              onClick={() => {
+                setSignUpModalOpen(true);
+                setIsMobileMenuOpen(false);
+              }}
+            >
+              Join Us
+            </button>
           </ul>
         </div>
       )}
+
+      {/* Login & SignUp Modals */}
+      <Login isOpen={isLoginModalOpen} onClose={() => setLoginModalOpen(false)} onSignUpClick={openSignUp} />
+      <SignUp isOpen={isSignUpModalOpen} onClose={() => setSignUpModalOpen(false)} onLoginClick={openLogin} />
     </div>
   );
 };
