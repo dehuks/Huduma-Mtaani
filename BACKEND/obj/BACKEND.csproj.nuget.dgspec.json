@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "/home/dehuks/BACKEND/BACKEND.csproj": {}
+    "/home/dehuks/HudumaMtaani/BACKEND/BACKEND.csproj": {}
   },
   "projects": {
-    "/home/dehuks/BACKEND/BACKEND.csproj": {
+    "/home/dehuks/HudumaMtaani/BACKEND/BACKEND.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/home/dehuks/BACKEND/BACKEND.csproj",
+        "projectUniqueName": "/home/dehuks/HudumaMtaani/BACKEND/BACKEND.csproj",
         "projectName": "BACKEND",
-        "projectPath": "/home/dehuks/BACKEND/BACKEND.csproj",
+        "projectPath": "/home/dehuks/HudumaMtaani/BACKEND/BACKEND.csproj",
         "packagesPath": "/home/dehuks/.nuget/packages/",
-        "outputPath": "/home/dehuks/BACKEND/obj/",
+        "outputPath": "/home/dehuks/HudumaMtaani/BACKEND/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "/home/dehuks/.nuget/NuGet/NuGet.Config"
@@ -47,6 +47,23 @@
             "Microsoft.AspNetCore.OpenApi": {
               "target": "Package",
               "version": "[9.0.1, )"
+            },
+            "Microsoft.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[9.0.2, )"
+            },
+            "Microsoft.EntityFrameworkCore.Design": {
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[9.0.2, )"
+            },
+            "Microsoft.EntityFrameworkCore.Tools": {
+              "target": "Package",
+              "version": "[9.0.2, )"
+            },
+            "Npgsql.EntityFrameworkCore.PostgreSQL": {
+              "target": "Package",
+              "version": "[9.0.2, )"
             }
           },
           "imports": [
