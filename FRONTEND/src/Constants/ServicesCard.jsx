@@ -13,7 +13,7 @@ const ServicesCard = () => {
             <p className='font-bold'>{service.title}</p>
         </div>
         <div>
-            <p>{service.description}</p>
+            <p>All Electrical services such as repairs, installations and maintenance.</p>
     
         </div>
         
