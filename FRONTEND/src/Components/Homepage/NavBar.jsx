@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Menu, X } from "lucide-react"; // Import icons
 import Login from "../Auth/Login";
 import SignUp from "../Auth/SignUp";
@@ -19,6 +19,21 @@ const NavBar = () => {
     setSignUpModalOpen(false);
     setLoginModalOpen(true);
   };
+
+      // Handle body scroll when modal opens/closes
+      useEffect(() => {
+        if (isSignUpModalOpen || isLoginModalOpen) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = 'auto';
+        }
+
+        // Cleanup function
+        return () => {
+            document.body.style.overflow = 'auto';
+        };
+    }, [isSignUpModalOpen, isLoginModalOpen]);
+
 
   return (
     <div className="relative">
