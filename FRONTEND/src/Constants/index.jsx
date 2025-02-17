@@ -92,3 +92,11 @@ export const socials = [
   {icon: <Twitter size={18}/>},
 
 ];
+
+export const Auth = [
+  {icon:<Facebook/>,text: "Google"},
+  {icon:<Facebook/>,text: "Apple"},
+  {icon:<Facebook/>,text:"Facebook"}
+
+
+]
