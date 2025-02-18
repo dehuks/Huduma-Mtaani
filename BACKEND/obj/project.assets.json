@@ -2887,11 +2887,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/home/dehuks/HudumaMtaani/BACKEND/BACKEND.csproj",
+      "projectUniqueName": "/home/dehuks/Huduma-Mtaani/BACKEND/BACKEND.csproj",
       "projectName": "BACKEND",
-      "projectPath": "/home/dehuks/HudumaMtaani/BACKEND/BACKEND.csproj",
+      "projectPath": "/home/dehuks/Huduma-Mtaani/BACKEND/BACKEND.csproj",
       "packagesPath": "/home/dehuks/.nuget/packages/",
-      "outputPath": "/home/dehuks/HudumaMtaani/BACKEND/obj/",
+      "outputPath": "/home/dehuks/Huduma-Mtaani/BACKEND/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "/home/dehuks/.nuget/NuGet/NuGet.Config"
