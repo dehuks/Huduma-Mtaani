@@ -1,0 +1,50 @@
+# User-specific files
+.vs/
+.vscode/
+.idea/
+
+# Windows Installer files
+Thumbs.db
+ehthumbs.db
+
+# Windows Installer files
+Desktop.ini
+
+# .NET build directories
+bin/
+obj/
+
+# .NET Core
+project.lock.json
+project.fragment.lock.json
+
+# Windows Installer files
+*.cab
+*.msi
+*.msm
+*.msp
+
+# Windows Installer temporary files
+*.log
+*.bak
+*.swp
+
+# User-specific files
+# User-specific files for Visual Studio for Mac
+.vscode/
+
+# JetBrains Rider
+.idea/
+
+# Windows Installer temporary files
+*.vspscc
+*.vssscc
+
+# macOS
+.DS_Store
+
+# JetBrains Rider
+.idea/
+
+# Build result of the web project in ASP.NET Core (if using static files)
+wwwroot/
