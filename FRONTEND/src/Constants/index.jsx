@@ -1,5 +1,5 @@
 import { Cable, icons } from "lucide-react";
-import { Wrench,Shirt,Bike,Facebook,Instagram,Twitter,MapPin,Mail,Phone } from "lucide-react";
+import { Wrench,Shirt,Bike,Facebook,Instagram,Twitter,MapPin,Mail,Phone,FolderKanban,FolderClock,Wallet } from "lucide-react";
 
 
 import user1 from "../assets/images/profile-pictures/User1.png"
@@ -90,13 +90,25 @@ export const socials = [
   {icon: <Facebook size={18}/> },
   {icon: <Instagram size={18}/>},
   {icon: <Twitter size={18}/>},
-
 ];
 
 export const Auth = [
   {icon:<Facebook/>,text: "Google"},
   {icon:<Facebook/>,text: "Apple"},
   {icon:<Facebook/>,text:"Facebook"}
+];
+
+export const DashServices = [
+  {icon:<Wrench/>,text: "Plumbing"},
+  {icon:<Cable/>,text: "Electrician"},
+  {icon:<Shirt/>,text: "Laundry"},
+  {icon:<Bike/>,text: "Errands"},
+
+];
+
+export const DashHistory = [
+  {icon:<FolderKanban/>,text: "Services"},
+  {icon:<Wallet/>,text: "Payment"},
+];
 
 
-]

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import AuthImage from '../../assets/images/Auth.png';
 import axiosInstance from '../../Constants/axiosInstance';
 import { Auth } from '../../Constants';
+import { Link } from 'react-router-dom';
 
 const Login = ({ isOpen, onClose, onSignUpClick }) => {
   const [email, setEmail] = useState('');
@@ -16,6 +17,7 @@ const Login = ({ isOpen, onClose, onSignUpClick }) => {
     setEmail('');
     setPassword('');
   };
+
 
   const handleSignin = async (e) => {
     e.preventDefault();
@@ -144,13 +146,24 @@ const Login = ({ isOpen, onClose, onSignUpClick }) => {
                 <div className="flex justify-center mt-4">
                   <button
                     type="submit"
-                    className="bg-Buttons rounded-md px-8 py-2 text-Headings w-full"
+                    className="bg-Button rounded-md px-8 py-2 text-Headings w-3/4"
                     disabled={loading}
                   >
                     {loading ? 'Signing in...' : 'Sign in'}
                   </button>
                 </div>
               </form>
+              <div className="flex justify-center mt-4">
+                  <button
+                    
+                    className="bg-Button rounded-md px-8 py-2 text-Headings w-3/4"
+                    
+                  >
+                    <Link to='/customer-dashboard'>
+                    Customer Dashboard</Link>
+                  </button>
+                </div>
+              
             </div>
 
             <div className="pt-4 text-neutral-400 flex items-center justify-center gap-3">
@@ -159,7 +172,7 @@ const Login = ({ isOpen, onClose, onSignUpClick }) => {
 
             <div className="flex justify-center items-center mt-4 gap-3">
               {Auth.map((auth, index) => (
-                <div key={index} className="flex border rounded px-4 py-1">
+                <div key={index} className="flex border border-black rounded px-4 py-1">
                   {auth.icon} {auth.text}
                 </div>
               ))}
