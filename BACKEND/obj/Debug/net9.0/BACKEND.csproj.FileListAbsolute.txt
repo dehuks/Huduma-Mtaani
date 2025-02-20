@@ -295,3 +295,14 @@
 /home/dehuks/Huduma-Mtaani/BACKEND/obj/Debug/net9.0/BACKEND.pdb
 /home/dehuks/Huduma-Mtaani/BACKEND/obj/Debug/net9.0/BACKEND.genruntimeconfig.cache
 /home/dehuks/Huduma-Mtaani/BACKEND/obj/Debug/net9.0/ref/BACKEND.dll
+/home/dehuks/Huduma-Mtaani/BACKEND/bin/Debug/net9.0/Microsoft.AspNetCore.Authentication.JwtBearer.dll
+/home/dehuks/Huduma-Mtaani/BACKEND/bin/Debug/net9.0/Microsoft.IdentityModel.Abstractions.dll
+/home/dehuks/Huduma-Mtaani/BACKEND/bin/Debug/net9.0/Microsoft.IdentityModel.JsonWebTokens.dll
+/home/dehuks/Huduma-Mtaani/BACKEND/bin/Debug/net9.0/Microsoft.IdentityModel.Logging.dll
+/home/dehuks/Huduma-Mtaani/BACKEND/bin/Debug/net9.0/Microsoft.IdentityModel.Protocols.dll
+/home/dehuks/Huduma-Mtaani/BACKEND/bin/Debug/net9.0/Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
+/home/dehuks/Huduma-Mtaani/BACKEND/bin/Debug/net9.0/Microsoft.IdentityModel.Tokens.dll
+/home/dehuks/Huduma-Mtaani/BACKEND/bin/Debug/net9.0/Swashbuckle.AspNetCore.Swagger.dll
+/home/dehuks/Huduma-Mtaani/BACKEND/bin/Debug/net9.0/Swashbuckle.AspNetCore.SwaggerGen.dll
+/home/dehuks/Huduma-Mtaani/BACKEND/bin/Debug/net9.0/Swashbuckle.AspNetCore.SwaggerUI.dll
+/home/dehuks/Huduma-Mtaani/BACKEND/bin/Debug/net9.0/System.IdentityModel.Tokens.Jwt.dll

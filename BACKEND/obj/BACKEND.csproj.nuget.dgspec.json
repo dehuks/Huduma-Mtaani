@@ -1,30 +1,30 @@
 {
   "format": 1,
   "restore": {
-    "/opt/lampp/htdocs/Huduma-Mtaani/BACKEND/BACKEND.csproj": {}
+    "/home/dehuks/Huduma-Mtaani/BACKEND/BACKEND.csproj": {}
   },
   "projects": {
-    "/opt/lampp/htdocs/Huduma-Mtaani/BACKEND/BACKEND.csproj": {
+    "/home/dehuks/Huduma-Mtaani/BACKEND/BACKEND.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/opt/lampp/htdocs/Huduma-Mtaani/BACKEND/BACKEND.csproj",
+        "projectUniqueName": "/home/dehuks/Huduma-Mtaani/BACKEND/BACKEND.csproj",
         "projectName": "BACKEND",
-        "projectPath": "/opt/lampp/htdocs/Huduma-Mtaani/BACKEND/BACKEND.csproj",
-        "packagesPath": "/home/nzomo/.nuget/packages/",
-        "outputPath": "/opt/lampp/htdocs/Huduma-Mtaani/BACKEND/obj/",
+        "projectPath": "/home/dehuks/Huduma-Mtaani/BACKEND/BACKEND.csproj",
+        "packagesPath": "/home/dehuks/.nuget/packages/",
+        "outputPath": "/home/dehuks/Huduma-Mtaani/BACKEND/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "/home/nzomo/.nuget/NuGet/NuGet.Config"
+          "/home/dehuks/.nuget/NuGet/NuGet.Config"
         ],
         "originalTargetFrameworks": [
-          "net8.0"
+          "net9.0"
         ],
         "sources": {
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
-          "net8.0": {
-            "targetAlias": "net8.0",
+          "net9.0": {
+            "targetAlias": "net9.0",
             "projectReferences": {}
           }
         },
@@ -37,15 +37,20 @@
           "enableAudit": "true",
           "auditLevel": "low",
           "auditMode": "direct"
-        }
+        },
+        "SdkAnalysisLevel": "9.0.100"
       },
       "frameworks": {
-        "net8.0": {
-          "targetAlias": "net8.0",
+        "net9.0": {
+          "targetAlias": "net9.0",
           "dependencies": {
+            "Microsoft.AspNetCore.Authentication.JwtBearer": {
+              "target": "Package",
+              "version": "[9.0.2, )"
+            },
             "Microsoft.AspNetCore.OpenApi": {
               "target": "Package",
-              "version": "[7.0.12, )"
+              "version": "[9.0.1, )"
             },
             "Microsoft.EntityFrameworkCore": {
               "target": "Package",
@@ -56,17 +61,21 @@
               "target": "Package",
               "version": "[9.0.2, )"
             },
-            "Microsoft.EntityFrameworkCore.SqlServer": {
-              "target": "Package",
-              "version": "[9.0.1, )"
-            },
             "Microsoft.EntityFrameworkCore.Tools": {
               "target": "Package",
               "version": "[9.0.2, )"
             },
             "Npgsql.EntityFrameworkCore.PostgreSQL": {
               "target": "Package",
-              "version": "[9.0.3, )"
+              "version": "[9.0.2, )"
+            },
+            "Swashbuckle.AspNetCore": {
+              "target": "Package",
+              "version": "[7.2.0, )"
+            },
+            "System.IdentityModel.Tokens.Jwt": {
+              "target": "Package",
+              "version": "[8.5.0, )"
             }
           },
           "imports": [
@@ -88,7 +97,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/8.0.405/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/9.0.102/PortableRuntimeIdentifierGraph.json"
         }
       }
     }
