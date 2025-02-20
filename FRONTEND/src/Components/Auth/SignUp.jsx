@@ -178,7 +178,7 @@ const SignUp = ({ isOpen, onClose, onLoginClick }) => {
                 <div className='flex justify-center mt-4'>
                   <button
                     type='submit'
-                    className='bg-Buttons rounded-md px-8 py-2 text-Headings'
+                    className='bg-Button rounded-md px-8 py-2 text-Headings w-3/4 '
                     disabled={loading}
                   >
                     {loading ? 'Creating Account...' : 'Create Account '}
@@ -191,7 +191,7 @@ const SignUp = ({ isOpen, onClose, onLoginClick }) => {
             </div>
             <div className='flex justify-center items-center mt-4 gap-3'>
               {Auth.map((Auth,index)=>(
-              <div key={index}className='flex border rounded px-4 py-1'>
+              <div key={index}className='flex border border-black rounded px-4 py-1'>
                 {Auth.icon} {Auth.text}
 
               </div>

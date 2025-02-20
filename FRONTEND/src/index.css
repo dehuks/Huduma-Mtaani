@@ -47,10 +47,10 @@
     font-family: var(--font-heading);
     color: var(--secondary-color);
   }
-  li:hover{
+  /* li:hover{
     background:white;
     border-radius: 15px;
     padding-inline: 10px;
     color: black;
-  }
+  } */
   
