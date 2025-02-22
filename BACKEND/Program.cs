@@ -5,6 +5,18 @@ using BACKEND.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll",
+        policy => policy
+            .AllowAnyOrigin()
+            .AllowAnyMethod()
+            .AllowAnyHeader());
+});
+
+var app = builder.Build();
+
+
 // Add services to the container.
 builder.Services.AddControllers();
 
@@ -21,7 +33,6 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 builder.Services.AddDbContext<HudumaDbContext>(options =>
     options.UseNpgsql(connectionString, b => b.MigrationsAssembly("BACKEND")));
 
-var app = builder.Build();
 
 // Enable middleware to serve Swagger UI
 if (app.Environment.IsDevelopment())
@@ -34,5 +45,7 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseAuthorization();
 app.MapControllers();
+app.UseCors("AllowAll"); // Apply CORS
+
 
 app.Run();
