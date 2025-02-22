@@ -28,5 +28,7 @@ namespace BACKEND.Models
         
         [ForeignKey("RatingId")]
         public virtual Rating Rating { get; set; }
+
+         public string PasswordHash { get; set; }
     }
 }

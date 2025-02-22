@@ -3592,19 +3592,19 @@
     ]
   },
   "packageFolders": {
-    "/home/nzomo/.nuget/packages/": {}
+    "/home/dehuks/.nuget/packages/": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/opt/lampp/htdocs/Huduma-Mtaani/BACKEND/BACKEND.csproj",
+      "projectUniqueName": "/home/dehuks/Huduma-Mtaani/BACKEND/BACKEND.csproj",
       "projectName": "BACKEND",
-      "projectPath": "/opt/lampp/htdocs/Huduma-Mtaani/BACKEND/BACKEND.csproj",
-      "packagesPath": "/home/nzomo/.nuget/packages/",
-      "outputPath": "/opt/lampp/htdocs/Huduma-Mtaani/BACKEND/obj/",
+      "projectPath": "/home/dehuks/Huduma-Mtaani/BACKEND/BACKEND.csproj",
+      "packagesPath": "/home/dehuks/.nuget/packages/",
+      "outputPath": "/home/dehuks/Huduma-Mtaani/BACKEND/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "/home/nzomo/.nuget/NuGet/NuGet.Config"
+        "/home/dehuks/.nuget/NuGet/NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net9.0"
@@ -3628,7 +3628,7 @@
         "auditLevel": "low",
         "auditMode": "direct"
       },
-      "SdkAnalysisLevel": "9.0.200"
+      "SdkAnalysisLevel": "9.0.100"
     },
     "frameworks": {
       "net9.0": {
@@ -3687,7 +3687,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/9.0.200/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/9.0.102/PortableRuntimeIdentifierGraph.json"
       }
     }
   }
