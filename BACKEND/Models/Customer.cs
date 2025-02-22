@@ -23,5 +23,7 @@ namespace BACKEND.Models
         
         [ForeignKey("AddressId")]
         public virtual Address Address { get; set; }
+
+         public string PasswordHash { get; set; }
     }
 }
