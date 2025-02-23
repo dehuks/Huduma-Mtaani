@@ -20,18 +20,18 @@ Huduma Mtaani is a web app connecting users with reliable local service provider
 1. **Clone the repository**:
    ```sh
    git clone https://github.com/your-repo/huduma-mtaani.git
-   cd huduma-mtaani
+   cd Huduma-Mtaani
    ```
 2. **Backend Setup**:
    ```sh
-   cd HudumaMtaani.API
+   cd BACKEND
    dotnet restore
    dotnet ef database update
    dotnet run
    ```
 3. **Frontend Setup**:
    ```sh
-   cd HudumaMtaani.Frontend
+   cd FRONTEND
    npm install
    npm start
    ```
