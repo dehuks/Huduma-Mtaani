@@ -2,9 +2,19 @@ import React, { useState } from 'react';
 import { Menu, FolderKanban, FolderClock, Bell, Settings, LogOut } from 'lucide-react';
 import { DashHistory, DashServices } from '../../Constants';
 import ProfileImage from '../../assets/images/profile-pictures/User3.png';
+import { useNavigate } from 'react-router-dom';
 
 const CustDashboard = () => {
-  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+const navigate = useNavigate();
+const userEmail = localStorage.getItem('userEmail');
+
+const handleLogout = () => {
+  localStorage.removeItem('userEmail');
+  localStorage.removeItem('token');
+  navigate('/');
+}
+
 
   return (
     <div className='relative bg-neutral-100 flex'>
@@ -49,7 +59,7 @@ const CustDashboard = () => {
               </div>
               <div className='mt-8 px-2 flex gap-3 cursor-pointer'>
                 <p className='text-Icon-bg'><LogOut /></p>
-                <p>Logout</p>
+                <p onClick={handleLogout}>Logout</p>
               </div>
             </div>
           </div>
@@ -69,8 +79,18 @@ const CustDashboard = () => {
             <ul className={`${isSidebarOpen ? 'hidden md:flex sm:flex gap-4 ' : 'flex gap-4'}`}>
               <li><Bell /></li>
               <li><Settings /></li>
-              <li>
-                <img src={ProfileImage} className='w-8 h-8 rounded-full' alt='User Profile' />
+              <li className="relative group">
+                <img 
+                  src={ProfileImage} 
+                  className='w-8 h-8 rounded-full cursor-pointer' 
+                  alt='User Profile' 
+                />
+                {/* Tooltip */}
+                <div className="absolute right-0 mt-2 w-max opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 bg-gray-800 text-white text-sm rounded py-1 px-2 z-10">
+                  {userEmail}
+                  {/* Tooltip arrow */}
+                  <div className="absolute right-3 -top-1 w-2 h-2 bg-gray-800 transform rotate-45"></div>
+                </div>
               </li>
             </ul>
           </div>

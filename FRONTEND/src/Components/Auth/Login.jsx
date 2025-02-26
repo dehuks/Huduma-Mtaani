@@ -1,23 +1,21 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import AuthImage from '../../assets/images/Auth.png';
 import axiosInstance from '../../Constants/axiosInstance';
 import { Auth } from '../../Constants';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 const Login = ({ isOpen, onClose, onSignUpClick }) => {
+  const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
-
-  if (!isOpen) return null;
-
+  
   const clearForm = () => {
     setEmail('');
     setPassword('');
   };
-
 
   const handleSignin = async (e) => {
     e.preventDefault();
@@ -26,22 +24,37 @@ const Login = ({ isOpen, onClose, onSignUpClick }) => {
     setSuccess(false);
 
     try {
-      const response = await axiosInstance.post('/login/', {
+      const response = await axiosInstance.post('http://localhost:5228/api/signin', {
         email,
         password,
       });
 
       console.log('Signin Successful:', response.data);
+      
+      // Store the user's email in localStorage
+      localStorage.setItem('userEmail', email);
+      
+      // If the response includes a token, store that too
+      if (response.data.token) {
+        localStorage.setItem('authToken', response.data.token);
+      }
+      
+      // If the response includes user data, store that too
+      if (response.data.user) {
+        localStorage.setItem('userData', JSON.stringify(response.data.user));
+      }
+      
       setSuccess(true);
       clearForm(); // Clear the form after successful submission
       setTimeout(() => {
         onClose();
+        navigate('/customer-dashboard');
       }, 2000);
     } catch (err) {
       if (err.response?.data) {
-        setErrors(err.response.data);
+        setErrors({general: err.response.data});
       } else {
-        setErrors({ general: err.message || 'Sign in Failed' });
+        setErrors({ general: 'Sign in Failed' });
       }
     } finally {
       setLoading(false);
@@ -56,10 +69,13 @@ const Login = ({ isOpen, onClose, onSignUpClick }) => {
     }
   };
 
+  // Return null after all hooks have been called
+  if (!isOpen) return null;
+
   return (
     <div className="fixed inset-0 z-50">
       {/* Backdrop */}
-      <div className="fixed inset-0 backdrop-blur-sm  bg-opacity-50"></div>
+      <div className="fixed inset-0 backdrop-blur-sm bg-opacity-50"></div>
 
       {/* Modal content */}
       <div className="fixed inset-0 flex items-center justify-center">
@@ -152,18 +168,7 @@ const Login = ({ isOpen, onClose, onSignUpClick }) => {
                     {loading ? 'Signing in...' : 'Sign in'}
                   </button>
                 </div>
-              </form>
-              <div className="flex justify-center mt-4">
-                  <button
-                    
-                    className="bg-Button rounded-md px-8 py-2 text-Headings w-3/4"
-                    
-                  >
-                    <Link to='/customer-dashboard'>
-                    Customer Dashboard</Link>
-                  </button>
-                </div>
-              
+              </form>              
             </div>
 
             <div className="pt-4 text-neutral-400 flex items-center justify-center gap-3">
