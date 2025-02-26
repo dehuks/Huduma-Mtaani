@@ -1,5 +1,5 @@
 import { Cable, icons } from "lucide-react";
-import { Wrench,Shirt,Bike,Facebook,Instagram,Twitter,MapPin,Mail,Phone,FolderKanban,FolderClock,Wallet } from "lucide-react";
+import { Wrench,Shirt,Bike,Facebook,Instagram,Twitter,MapPin,Mail,Phone,FolderKanban,Wallet } from "lucide-react";
 
 
 import user1 from "../assets/images/profile-pictures/User1.png"
@@ -110,5 +110,30 @@ export const DashHistory = [
   {icon:<FolderKanban/>,text: "Services"},
   {icon:<Wallet/>,text: "Payment"},
 ];
+
+
+export const serviceProvidersData = {
+  'Plumbing': [
+    { id: 1, name: 'John Plumber', rating: 4.8, reviews: 124, location: 'Westlands, Nairobi', phone: '+254712345678', availability: 'Available Today' },
+    { id: 2, name: 'Quick Fix Plumbing', rating: 4.5, reviews: 98, location: 'Kilimani, Nairobi', phone: '+254723456789', availability: 'Available Tomorrow' },
+    { id: 3, name: 'Expert Pipes', rating: 4.7, reviews: 112, location: 'South C, Nairobi', phone: '+254734567890', availability: 'Available Today' }
+  ],
+  'Electrician': [
+    { id: 1, name: 'Power Solutions', rating: 4.9, reviews: 156, location: 'South B, Nairobi', phone: '+254745678901', availability: 'Available Today' },
+    { id: 2, name: 'Electro Experts', rating: 4.7, reviews: 112, location: 'Langata, Nairobi', phone: '+254756789012', availability: 'Available in 2 Days' },
+    { id: 3, name: 'Bright Sparks', rating: 4.6, reviews: 87, location: 'Donholm, Nairobi', phone: '+254767890123', availability: 'Available Tomorrow' }
+  ],
+  'Laundry': [
+    { id: 1, name: 'Clean & Fresh Laundry', rating: 4.6, reviews: 89, location: 'CBD, Nairobi', phone: '+254778901234', availability: 'Available Today' },
+    { id: 2, name: 'Express Wash', rating: 4.4, reviews: 76, location: 'Parklands, Nairobi', phone: '+254789012345', availability: 'Available Tomorrow' },
+    { id: 3, name: 'Spotless Services', rating: 4.7, reviews: 102, location: 'Kileleshwa, Nairobi', phone: '+254790123456', availability: 'Available Today' }
+  ],
+  'Errands': [
+    { id: 1, name: 'Run4You Errands', rating: 4.7, reviews: 102, location: 'Karen, Nairobi', phone: '+254701234567', availability: 'Available Today' },
+    { id: 2, name: 'Swift Runners', rating: 4.5, reviews: 84, location: 'Kileleshwa, Nairobi', phone: '+254712345678', availability: 'Available Today' },
+    { id: 3, name: 'Errand Experts', rating: 4.6, reviews: 93, location: 'Lavington, Nairobi', phone: '+254723456789', availability: 'Available Tomorrow' }
+  ]
+};
+
 
 
