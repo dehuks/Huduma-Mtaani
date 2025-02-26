@@ -6,12 +6,13 @@ import { Auth } from '../../Constants';
 const SignUp = ({ isOpen, onClose, onLoginClick }) => {
   if (!isOpen) return null; // Hide modal when not open
 
-  const [first_name, setFirstName] = useState('');
-  const [last_name, setLastName] = useState('');
+  const [fullName, setfullName] = useState('');
   const [email, setEmail] = useState('');
+  const [phone, setPhone] = useState('');
   const [password, setPassword] = useState('');
-  const [errors, setErrors] = useState({}); // Use an object to store multiple errors
+  const [role, setRole] = useState('customer'); // 
   const [loading, setLoading] = useState(false);
+  const [errors, setErrors] = useState({})
   const [success, setSuccess] = useState(false); // State to track successful signup
 
   // Disable background scrolling when modal is open
@@ -35,11 +36,12 @@ const SignUp = ({ isOpen, onClose, onLoginClick }) => {
     setSuccess(false); // Reset success state
 
     try {
-      const response = await axiosInstance.post('/signup/', {
-        first_name,
-        last_name,
+      const response = await axiosInstance.post('http://localhost:5228/api/signup', {
+        fullName,
         email,
+        phone,
         password,
+        role,
       });
 
       console.log('Signup Successful:', response.data);
@@ -50,10 +52,9 @@ const SignUp = ({ isOpen, onClose, onLoginClick }) => {
     } catch (err) {
       if (err.response?.data) {
         // If the API returns field-specific errors, set them in the errors object
-        setErrors(err.response.data);
+        setErrors({general: err.response.data});
       } else {
-        // If no specific errors are returned, set a generic error
-        setErrors({ general: err.message || 'Signup Failed' });
+        setErrors({general: 'Signup Failed. Please try again.'})
       }
     } finally {
       setLoading(false);
@@ -108,40 +109,24 @@ const SignUp = ({ isOpen, onClose, onLoginClick }) => {
             <div className='pt-8'>
               <form onSubmit={handleSignup} className='flex flex-col gap-4'>
                 <div className='flex flex-col gap-1'>
-                  <label htmlFor="FirstName">First Name</label>
+                  <label htmlFor="FirstName">Full Name</label>
                   <input
                     type='text'
                     placeholder='John'
-                    value={first_name}
-                    onChange={(e) => setFirstName(e.target.value)}
-                    className={`border ${errors.first_name ? 'border-red-500' : 'border-neutral-400'} px-2 py-1 rounded-md`}
+                    value={fullName}
+                    onChange={(e) => setfullName(e.target.value)}
+                    className={`border ${errors.fullName ? 'border-red-500' : 'border-neutral-400'} px-2 py-1 rounded-md`}
                     required
                   />
-                  {/* Display first name errors */}
-                  {errors.first_name && (
+                  {/* Display Full name errors */}
+                  {errors.fullName && (
                     <div className="text-red-500 text-sm">
-                      {errors.first_name[0]} {/* Display the first error message */}
+                      {errors.fullName[0]} {/* Display the first error message */}
                     </div>
                   )}
                 </div>
-                <div className='flex flex-col gap-1'>
-                  <label htmlFor="LastName">Last Name</label>
-                  <input
-                    type="text"
-                    placeholder='Doe'
-                    value={last_name}
-                    onChange={(e) => setLastName(e.target.value)}
-                    className={`border ${errors.last_name ? 'border-red-500' : 'border-neutral-400'} px-2 py-1 rounded-md`}
-                    required
-                  />
-                  {/* Display last name errors */}
-                  {errors.last_name && (
-                    <div className="text-red-500 text-sm">
-                      {errors.last_name[0]}
-                    </div>
-                  )}
-                </div>
-                <div className='flex flex-col gap-1'>
+               
+                  <div className='flex flex-col gap-1'>
                   <label htmlFor="Email">Email</label>
                   <input
                     type="email"
@@ -158,6 +143,24 @@ const SignUp = ({ isOpen, onClose, onLoginClick }) => {
                     </div>
                   )}
                 </div>
+                <div className='flex flex-col gap-1'>
+                  <label htmlFor="Phone">Phone</label>
+                  <input
+                    type="text"
+                    placeholder='+254701203456'
+                    value={phone}
+                    onChange={(e) => setPhone(e.target.value)}
+                    className={`border ${errors.phone ? 'border-red-500' : 'border-neutral-400'} px-2 py-1 rounded-md`}
+                    required
+                  />
+                  {/* Display email errors */}
+                  {errors.phone && (
+                    <div className="text-red-500 text-sm">
+                      {errors.phone[0]}
+                    </div>
+                  )}
+                </div>
+
                 <div className='flex flex-col gap-1'>
                   <label htmlFor="Password">Password</label>
                   <input
