@@ -21,28 +21,24 @@ const ServiceProvider = ({ selectedService }) => {
       <h2 className="text-xl font-bold mb-4">{selectedService} Service Providers</h2>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {providers.map((provider, index) => (
-          <div key={index} className="border rounded-lg p-4 shadow-md">
+          <div key={index} className="border rounded-lg p-4 shadow-md flex flex-col justify-center items-center">
+            {/* <div className='flex justify-end'>
+           <p className="mt-1 tracking-tight text-Sub-Headings">Ksh 650/hr</p>
+           </div> */}
+           <div>
+            <img src={provider.image} className='w-24 h-24 rounded-full' alt="" />
+            </div>
+            <div className='flex flex-col justify-center items-center pt-4'>
             <h3 className="text-lg font-semibold">{provider.name}</h3>
             <p className="flex items-center gap-1">
-              <Star className="w-4 h-4 text-yellow-500" />
+              <Star className="w-4 h-4 fill-CTA-card text-CTA-card" />
               {provider.rating} ({provider.reviews} reviews)
             </p>
-            <p className="flex items-center gap-1">
-              <MapPin className="w-4 h-4 text-gray-600" />
-              {provider.location}
-            </p>
-            <p className="flex items-center gap-1">
-              <Phone className="w-4 h-4 text-blue-500" />
-              {provider.phone}
-            </p>
-            <p className="flex items-center gap-1">
-              <Calendar className="w-4 h-4 text-green-500" />
-              {provider.availability}
-            </p>
-            <p className="mt-2 font-semibold">Ksh 650/hr</p>
+
+
+            </div>
             <div className="mt-4 flex gap-2">
-              <button className="px-4 py-2 bg-blue-500 text-white rounded-lg">Book Now</button>
-              <button className="px-4 py-2 border border-gray-400 rounded-lg">Contact</button>
+              <button className="px-4 py-1 bg-Button text-white rounded-md">Request Services</button>
             </div>
           </div>
         ))}

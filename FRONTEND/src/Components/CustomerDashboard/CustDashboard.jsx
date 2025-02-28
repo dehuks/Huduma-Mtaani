@@ -84,9 +84,7 @@ const CustDashboard = () => {
               <button onClick={() => setIsSidebarOpen(!isSidebarOpen)}>
                 <Menu />
               </button>
-              <h2 className={`${isSidebarOpen ? 'hidden md:block sm:block ' : 'block'}`}>
-                {selectedService ? `${selectedService} Services` : 'Dashboard'}
-              </h2>
+              <h2>Dashboard</h2>
             </div>
             <div>
               <ul className={`${isSidebarOpen ? 'hidden md:flex sm:flex gap-4 ' : 'flex gap-4'}`}>
