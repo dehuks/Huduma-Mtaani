@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace BACKEND.Models
+namespace BACKEND.Models 
 {
     public class Admin
     {
@@ -17,5 +17,8 @@ namespace BACKEND.Models
         [Required]
         [Phone]
         public string Phone { get; set; }
+        
+        [Required]
+        public string PasswordHash { get; set; }
     }
 }
