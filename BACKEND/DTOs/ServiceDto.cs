@@ -14,12 +14,6 @@ namespace BACKEND.DTOs
         public int ServiceId { get; set; }
     }
 
-    public class OrderDto
-    {
-        public int ServiceProviderId { get; set; }
-        public int CustomerId { get; set; }
-        public decimal Amount { get; set; }
-    }
 
     public class PaymentDto
     {
