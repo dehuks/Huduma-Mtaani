@@ -48,3 +48,5 @@ project.fragment.lock.json
 
 # Build result of the web project in ASP.NET Core (if using static files)
 wwwroot/
+
+/BACKEND/obj/
