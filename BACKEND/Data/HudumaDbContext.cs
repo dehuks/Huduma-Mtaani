@@ -1,3 +1,5 @@
+using System.Security.Cryptography;
+using System.Text;
 using Microsoft.EntityFrameworkCore;
 using BACKEND.Models;
 
@@ -21,6 +23,27 @@ namespace BACKEND.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+
+            // Hash the default password
+            string passwordHash = HashPassword("Admin@123");
+
+            modelBuilder.Entity<Admin>().HasData(new Admin
+            {
+                AdminId = 1,
+                FullName = "Super Admin",
+                Email = "admin@yourdomain.com",
+                Phone = "1234567890",
+                PasswordHash = passwordHash
+            });
+        }
+
+        private static string HashPassword(string password)
+        {
+            using (var sha256 = SHA256.Create())
+            {
+                var hashedBytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(password));
+                return Convert.ToBase64String(hashedBytes);
+            }
         }
     }
 }
