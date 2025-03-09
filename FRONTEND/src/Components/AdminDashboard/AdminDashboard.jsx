@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import { Menu, FolderKanban, FolderClock, Bell, Settings, LogOut } from 'lucide-react';
-import { DashHistory, DashServices } from '../../Constants';
+import { AdminDashServiceProviders, AdminDashServices, DashHistory, DashServices } from '../../Constants';
 import ProfileImage from '../../assets/images/profile-pictures/User3.png';
 import { useNavigate } from 'react-router-dom';
 import ServiceProvider from '../../Constants/ServiceProvider';
 import { Link } from 'react-router-dom';
 
-const CustDashboard = () => {
+const AdminDashboard = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [selectedService, setSelectedService] = useState(null); // To track selected service
   const navigate = useNavigate();
@@ -41,7 +41,7 @@ const CustDashboard = () => {
               <p className='font-bold'>Services</p>
             </div>
             <div className='mt-4 px-2'>
-              {DashServices.map((service, index) => (
+              {AdminDashServices.map((service, index) => (
                 <div key={index} className='py-2'>
                   <li 
                     className={`flex gap-3 hover:bg-Cards hover:py-1 hover:px-1 hover:rounded-md cursor-pointer ${selectedService === service.text ? 'bg-Cards py-1 px-1 rounded-md font-medium' : ''}`}
@@ -52,6 +52,27 @@ const CustDashboard = () => {
                 </div>
               ))}
             </div>
+
+            <div className='mt-8'>
+            <div className='flex gap-3 py-1 px-2 border-l-[5px] border-Button-text bg-Placeholder w-full'>
+              <p><FolderKanban /></p>
+              <p className='font-bold'>Service Providers</p>
+            </div>
+            <div className='mt-4 px-2'>
+              {AdminDashServiceProviders.map((service, index) => (
+                <div key={index} className='py-2'>
+                  <li 
+                    className={`flex gap-3 hover:bg-Cards hover:py-1 hover:px-1 hover:rounded-md cursor-pointer ${selectedService === service.text ? 'bg-Cards py-1 px-1 rounded-md font-medium' : ''}`}
+                    onClick={() => handleServiceClick(service.text)}
+                  >
+                    <p className='text-Icon-bg'>{service.icon}</p> {service.text}
+                  </li>
+                </div>
+              ))}
+            </div>
+            </div>
+
+            
 
             <div className='mt-8'>
               <div className='flex gap-3 py-1 px-2 border-l-[5px] border-Button-text bg-Placeholder w-full'>
@@ -74,12 +95,6 @@ const CustDashboard = () => {
               <div className='mt-5'>
                 <Link to="/admin-dashboard">
                 Admin Dashboard
-
-                </Link>
-              </div>
-              <div className='mt-5'>
-                <Link to="/serviceprovider-dashbooard">
-                Service Provider Dashboard
 
                 </Link>
               </div>
@@ -151,4 +166,4 @@ const CustDashboard = () => {
   );
 };
 
-export default CustDashboard;
+export default AdminDashboard;

@@ -1,5 +1,5 @@
 import { Cable, icons } from "lucide-react";
-import { Wrench,Shirt,Bike,Facebook,Instagram,Twitter,MapPin,Mail,Phone,FolderKanban,Wallet } from "lucide-react";
+import { Wrench,Shirt,Bike,Facebook,Instagram,Twitter,MapPin,Mail,Phone,FolderKanban,Wallet,Calendar } from "lucide-react";
 
 
 import user1 from "../assets/images/profile-pictures/User1.png"
@@ -105,6 +105,16 @@ export const DashServices = [
   {icon:<Bike/>,text: "Errands"},
 
 ];
+export const AdminDashServices = [
+  {icon:<Wrench/>,text: "Add Service"},
+  {icon:<Cable/>,text: "View Services"},
+
+];
+export const AdminDashServiceProviders = [
+  {icon:<Wrench/>,text: "Add Service Provider"},
+  {icon:<Cable/>,text: "View Service Providers"},
+
+];
 
 export const DashHistory = [
   {icon:<FolderKanban/>,text: "Services"},
@@ -114,9 +124,9 @@ export const DashHistory = [
 
 export const serviceProvidersData = {
   'Plumbing': [
-    { id: 1, name: 'John Plumber', rating: 4.8, reviews: 124, location: 'Westlands, Nairobi', phone: '+254712345678', availability: 'Available Today',image:user1 },
-    { id: 2, name: 'Quick Fix Plumbing', rating: 4.5, reviews: 98, location: 'Kilimani, Nairobi', phone: '+254723456789', availability: 'Available Tomorrow',image:user3 },
-    { id: 3, name: 'Expert Pipes', rating: 4.7, reviews: 112, location: 'South C, Nairobi', phone: '+254734567890', availability: 'Available Today',image:user4 }
+    { id: 1, name: 'John Doe', rating: 4.8, reviews: 124, location: 'Westlands, Nairobi', phone: '+254712345678', availability: 'Available Today',image:user1 },
+    { id: 2, name: 'Jane Doe', rating: 4.5, reviews: 98, location: 'Kilimani, Nairobi', phone: '+254723456789', availability: 'Available Tomorrow',image:user3 },
+    { id: 3, name: 'John Smith', rating: 4.7, reviews: 112, location: 'South C, Nairobi', phone: '+254734567890', availability: 'Available Today',image:user4 }
   ],
   'Electrician': [
     { id: 1, name: 'Power Solutions', rating: 4.9, reviews: 156, location: 'South B, Nairobi', phone: '+254745678901', availability: 'Available Today',image:user1 },
@@ -135,5 +145,53 @@ export const serviceProvidersData = {
   ]
 };
 
+export const AdminInisghts = [
+  {
+    Quantity: "450",
+    Text: "Total Orders",
+    Icon: <Calendar/>
+  },
+  {
+    Quantity: "3",
+    Text: "Pending Orders",
+    Icon: <Calendar/>
+  }, 
+  {
+    Quantity: "Ksh 10K",
+    Text: "Total Revenue",
+    Icon: <Calendar/>
+  },
+  {
+    Quantity: "450",
+    Text: "Customers",
+    Icon: <Calendar/>
+  },
+  {
+    Quantity: "3",
+    Text: "Service Providers",
+    Icon: <Calendar/>
+  },
+  {
+    Quantity: "Ksh 8K",
+    Text: "Total Earnings",
+    Icon: <Calendar/>
+  },
+]
 
-
+export const ProviderInsights = [
+  {
+    Quantity: "450",
+    Text: "Total Orders",
+    Icon: <Calendar/>
+  },
+  {
+    Quantity: "3",
+    Text: "Pending Orders",
+    Icon: <Calendar/>
+  }, 
+  {
+    Quantity: "Ksh 10K",
+    Text: "Total Revenue",
+    Icon: <Calendar/>
+  }
+]
