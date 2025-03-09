@@ -44,7 +44,7 @@ namespace BACKEND.Migrations
 
                     b.HasKey("AddressId");
 
-                    b.ToTable("Addresses");
+                    b.ToTable("Addresses", (string)null);
                 });
 
             modelBuilder.Entity("BACKEND.Models.Admin", b =>
@@ -69,7 +69,7 @@ namespace BACKEND.Migrations
 
                     b.HasKey("AdminId");
 
-                    b.ToTable("Admins");
+                    b.ToTable("Admins", (string)null);
                 });
 
             modelBuilder.Entity("BACKEND.Models.Customer", b =>
@@ -103,7 +103,7 @@ namespace BACKEND.Migrations
 
                     b.HasIndex("AddressId");
 
-                    b.ToTable("Customers");
+                    b.ToTable("Customers", (string)null);
                 });
 
             modelBuilder.Entity("BACKEND.Models.Order", b =>
@@ -139,7 +139,7 @@ namespace BACKEND.Migrations
 
                     b.HasIndex("ServiceProviderId");
 
-                    b.ToTable("Orders");
+                    b.ToTable("Orders", (string)null);
                 });
 
             modelBuilder.Entity("BACKEND.Models.Payment", b =>
@@ -167,7 +167,7 @@ namespace BACKEND.Migrations
 
                     b.HasIndex("OrderId");
 
-                    b.ToTable("Payments");
+                    b.ToTable("Payments", (string)null);
                 });
 
             modelBuilder.Entity("BACKEND.Models.Rating", b =>
@@ -188,7 +188,7 @@ namespace BACKEND.Migrations
 
                     b.HasIndex("CustomerId");
 
-                    b.ToTable("Ratings");
+                    b.ToTable("Ratings", (string)null);
                 });
 
             modelBuilder.Entity("BACKEND.Models.Service", b =>
@@ -209,7 +209,7 @@ namespace BACKEND.Migrations
 
                     b.HasKey("ServiceId");
 
-                    b.ToTable("Services");
+                    b.ToTable("Services", (string)null);
                 });
 
             modelBuilder.Entity("BACKEND.Models.ServiceProvider", b =>
@@ -248,7 +248,7 @@ namespace BACKEND.Migrations
 
                     b.HasIndex("ServiceId");
 
-                    b.ToTable("ServiceProviders");
+                    b.ToTable("ServiceProviders", (string)null);
                 });
 
             modelBuilder.Entity("BACKEND.Models.Customer", b =>

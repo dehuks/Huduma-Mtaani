@@ -40,6 +40,22 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+//Initialize super admin
+// Add this near the end of your Program.cs file, before app.Run()
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    try
+    {
+        DbInitializer.Initialize(services);
+    }
+    catch (Exception ex)
+    {
+        var logger = services.GetRequiredService<ILogger<Program>>();
+        logger.LogError(ex, "An error occurred while seeding the database.");
+    }
+}
+
 app.UseRouting();
 app.UseCors("AllowAll");
 app.UseAuthorization();
