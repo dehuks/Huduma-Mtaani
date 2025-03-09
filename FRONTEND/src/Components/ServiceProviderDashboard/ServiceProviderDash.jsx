@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import { Menu, FolderKanban, FolderClock, Bell, Settings, LogOut } from 'lucide-react';
-import { DashHistory, DashServices } from '../../Constants';
+import { DashHistory, DashServices, ProviderInsights } from '../../Constants';
 import ProfileImage from '../../assets/images/profile-pictures/User3.png';
 import { useNavigate } from 'react-router-dom';
 import ServiceProvider from '../../Constants/ServiceProvider';
 import { Link } from 'react-router-dom';
 
-const CustDashboard = () => {
+const ServiceProviderDash = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [selectedService, setSelectedService] = useState(null); // To track selected service
   const navigate = useNavigate();
@@ -123,32 +123,29 @@ const CustDashboard = () => {
 
         {/* Content Area */}
         <div className="flex-1 overflow-auto">
-          {selectedService ? (
-            <ServiceProvider selectedService={selectedService} />
-          ) : (
-            <div className="p-6 flex flex-col justify-center items-center">
-              <h2 className="text-xl font-bold mb-4">Welcome to Huduma Mtaani</h2>
-              <p className="text-gray-600 mb-6">Select a service from the sidebar to view available service providers.</p>
-              
-              {/* Quick access service cards
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mt-6">
-                {['Plumbing', 'Electrician', 'Laundry', 'Errands'].map((service) => (
-                  <div 
-                    key={service}
-                    className="bg-white p-4 rounded-lg shadow cursor-pointer hover:shadow-md transition-shadow"
-                    onClick={() => handleServiceClick(service)}
-                  >
-                    <h3 className="font-semibold text-lg mb-2">{service}</h3>
-                    <p className="text-sm text-gray-500">Find and book {service.toLowerCase()} services in your area</p>
-                  </div>
-                ))}
-              </div> */}
+          
+            <div className="p-6 grid md:grid-cols-3  grid-cols-1 gap-6  place-items-center ">
+            {ProviderInsights.map((ProviderInsight, index)=> (
+                <div key={index} className='flex gap-12 justify-between border border-Input-Outline rounded-md px-5 py-2 bg-white md:w-full w-2/3'>
+                    <div>
+                        <p className='text-3xl'>{ProviderInsight.Quantity}</p>
+                        <p className='text-neutral-500'>{ProviderInsight.Text}</p>
+                    </div>
+                    <div className='text-white bg-Icon-bg rounded-full w-12 h-12 flex justify-center items-center   '>
+                        {ProviderInsight.Icon}
+                    </div>
+
+                </div>
+
+            ))}
             </div>
-          )}
+          <div>
+            
+          </div>
         </div>
       </div>
     </div>
   );
 };
 
-export default CustDashboard;
+export default ServiceProviderDash;
