@@ -1,20 +1,52 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Menu, FolderKanban, FolderClock, Bell, Settings, LogOut } from 'lucide-react';
-import { DashHistory, DashServices } from '../../Constants';
+import { DashHistory } from '../../Constants';
 import ProfileImage from '../../assets/images/profile-pictures/User3.png';
 import { useNavigate } from 'react-router-dom';
 import ServiceProvider from '../../Constants/ServiceProvider';
 import { Link } from 'react-router-dom';
+import axiosInstance from '../../Constants/axiosInstance';
 
 const CustDashboard = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
-  const [selectedService, setSelectedService] = useState(null); // To track selected service
+  const [selectedService, setSelectedService] = useState(null);
+  const [services, setServices] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  
   const navigate = useNavigate();
   const userEmail = localStorage.getItem('userEmail');
 
+  // Fetch services from the API
+  useEffect(() => {
+    const fetchServices = async () => {
+      try {
+        const token = localStorage.getItem('authToken');
+        
+        if (!token) {
+          console.warn('No authentication token found. Some features may be limited.');
+        }
+        
+        const headers = token ? { Authorization: `Bearer ${token}` } : {};
+        const response = await axiosInstance.get('http://localhost:5228/api/services', { headers });
+        
+        if (response.status === 200) {
+          setServices(response.data);
+        }
+      } catch (err) {
+        console.error('Error fetching services:', err);
+        setError('Failed to load services. Please try again later.');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchServices();
+  }, []);
+
   const handleLogout = () => {
     localStorage.removeItem('userEmail');
-    localStorage.removeItem('token');
+    localStorage.removeItem('authToken');
     navigate('/');
   };
 
@@ -40,17 +72,33 @@ const CustDashboard = () => {
               <p><FolderKanban /></p>
               <p className='font-bold'>Services</p>
             </div>
+            
+            {/* Services List */}
             <div className='mt-4 px-2'>
-              {DashServices.map((service, index) => (
-                <div key={index} className='py-2'>
-                  <li 
-                    className={`flex gap-3 hover:bg-Cards hover:py-1 hover:px-1 hover:rounded-md cursor-pointer ${selectedService === service.text ? 'bg-Cards py-1 px-1 rounded-md font-medium' : ''}`}
-                    onClick={() => handleServiceClick(service.text)}
-                  >
-                    <p className='text-Icon-bg'>{service.icon}</p> {service.text}
-                  </li>
-                </div>
-              ))}
+              {loading ? (
+                <div className="py-4 px-2 text-gray-500">Loading services...</div>
+              ) : error ? (
+                <div className="py-2 px-2 text-red-500">{error}</div>
+              ) : services.length > 0 ? (
+                services.map((service) => (
+                  <div key={service.serviceId} className='py-2'>
+                    <li 
+                      className={`flex gap-3 hover:bg-Cards hover:py-1 hover:px-1 hover:rounded-md cursor-pointer ${selectedService === service.serviceName ? 'bg-Cards py-1 px-1 rounded-md font-medium' : ''}`}
+                      onClick={() => handleServiceClick(service.serviceName)}
+                    >
+                      <p className='text-Icon-bg'>
+                        {/* Default icon for all services */}
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                          <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z" />
+                        </svg>
+                      </p> 
+                      {service.serviceName}
+                    </li>
+                  </div>
+                ))
+              ) : (
+                <div className="py-2 px-2 text-gray-500">No services available</div>
+              )}
             </div>
 
             <div className='mt-8'>
@@ -71,16 +119,14 @@ const CustDashboard = () => {
                 <p className='text-Icon-bg'><LogOut /></p>
                 <p onClick={handleLogout}>Logout</p>
               </div>
-              <div className='mt-5'>
-                <Link to="/admin-dashboard">
-                Admin Dashboard
-
+              <div className='mt-5 px-2'>
+                <Link to="/admin-dashboard" className="hover:text-blue-600 transition-colors">
+                  Admin Dashboard
                 </Link>
               </div>
-              <div className='mt-5'>
-                <Link to="/serviceprovider-dashbooard">
-                Service Provider Dashboard
-
+              <div className='mt-5 px-2'>
+                <Link to="/serviceprovider-dashbooard" className="hover:text-blue-600 transition-colors">
+                  Service Provider Dashboard
                 </Link>
               </div>
             </div>
@@ -130,19 +176,24 @@ const CustDashboard = () => {
               <h2 className="text-xl font-bold mb-4">Welcome to Huduma Mtaani</h2>
               <p className="text-gray-600 mb-6">Select a service from the sidebar to view available service providers.</p>
               
-              {/* Quick access service cards
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mt-6">
-                {['Plumbing', 'Electrician', 'Laundry', 'Errands'].map((service) => (
-                  <div 
-                    key={service}
-                    className="bg-white p-4 rounded-lg shadow cursor-pointer hover:shadow-md transition-shadow"
-                    onClick={() => handleServiceClick(service)}
-                  >
-                    <h3 className="font-semibold text-lg mb-2">{service}</h3>
-                    <p className="text-sm text-gray-500">Find and book {service.toLowerCase()} services in your area</p>
+              {/* Quick access service cards */}
+              {!loading && services.length > 0 && (
+                <div className="w-full max-w-4xl">
+                  <h3 className="text-lg font-semibold mb-4">Available Services</h3>
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    {services.map((service) => (
+                      <div 
+                        key={service.serviceId}
+                        className="bg-white p-4 rounded-lg shadow cursor-pointer hover:shadow-md transition-all hover:bg-blue-50"
+                        onClick={() => handleServiceClick(service.serviceName)}
+                      >
+                        <h3 className="font-semibold text-lg mb-2">{service.serviceName}</h3>
+                        <p className="text-sm text-gray-500">{service.serviceDescription}</p>
+                      </div>
+                    ))}
                   </div>
-                ))}
-              </div> */}
+                </div>
+              )}
             </div>
           )}
         </div>

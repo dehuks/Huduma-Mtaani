@@ -2,11 +2,13 @@ import React, { useEffect, useState } from "react";
 import { Menu, X } from "lucide-react"; // Import icons
 import Login from "../Auth/Login";
 import SignUp from "../Auth/SignUp";
+import AdminLogin from "../AdminAuth/AdminLogin";
 
 const NavBar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isLoginModalOpen, setLoginModalOpen] = useState(false);
   const [isSignUpModalOpen, setSignUpModalOpen] = useState(false);
+  const [isAdminLoginOpen, setAdminLoginOpen] = useState(false);
 
   // Function to switch from Login to SignUp
   const openSignUp = () => {
@@ -20,20 +22,25 @@ const NavBar = () => {
     setLoginModalOpen(true);
   };
 
-      // Handle body scroll when modal opens/closes
-      useEffect(() => {
-        if (isSignUpModalOpen || isLoginModalOpen) {
-            document.body.style.overflow = 'hidden';
-        } else {
-            document.body.style.overflow = 'auto';
-        }
+  // Function to open Admin Login from Login
+  const openAdminLogin = () => {
+    setLoginModalOpen(false);
+    setAdminLoginOpen(true);
+  };
 
-        // Cleanup function
-        return () => {
-            document.body.style.overflow = 'auto';
-        };
-    }, [isSignUpModalOpen, isLoginModalOpen]);
+  // Handle body scroll when modal opens/closes
+  useEffect(() => {
+    if (isSignUpModalOpen || isLoginModalOpen || isAdminLoginOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'auto';
+    }
 
+    // Cleanup function
+    return () => {
+      document.body.style.overflow = 'auto';
+    };
+  }, [isSignUpModalOpen, isLoginModalOpen, isAdminLoginOpen]);
 
   return (
     <div className="relative">
@@ -76,7 +83,7 @@ const NavBar = () => {
             <button
               className="bg-Placeholder px-3 py-1 rounded-xl"
               onClick={() => {
-                setSignUpModalOpen(true);
+                setLoginModalOpen(true);
                 setIsMobileMenuOpen(false);
               }}
             >
@@ -87,8 +94,22 @@ const NavBar = () => {
       )}
 
       {/* Login & SignUp Modals */}
-      <Login isOpen={isLoginModalOpen} onClose={() => setLoginModalOpen(false)} onSignUpClick={openSignUp} />
-      <SignUp isOpen={isSignUpModalOpen} onClose={() => setSignUpModalOpen(false)} onLoginClick={openLogin} />
+      <Login 
+        isOpen={isLoginModalOpen} 
+        onClose={() => setLoginModalOpen(false)} 
+        onSignUpClick={openSignUp}
+        onAdminSignInClick={openAdminLogin}
+      />
+      <SignUp 
+        isOpen={isSignUpModalOpen} 
+        onClose={() => setSignUpModalOpen(false)} 
+        onLoginClick={openLogin} 
+      />
+      <AdminLogin 
+        isOpen={isAdminLoginOpen} 
+        onClose={() => setAdminLoginOpen(false)} 
+        onLoginClick={openLogin}
+      />
     </div>
   );
 };

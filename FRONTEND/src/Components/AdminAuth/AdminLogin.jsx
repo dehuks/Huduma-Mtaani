@@ -4,7 +4,7 @@ import axiosInstance from '../../Constants/axiosInstance';
 import { Auth } from '../../Constants';
 import { useNavigate } from 'react-router-dom';
 
-const Login = ({ isOpen, onClose, onSignUpClick,onAdminSignInClick }) => {
+const AdminLogin = ({ isOpen, onClose, onLoginClick }) => {
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -24,7 +24,7 @@ const Login = ({ isOpen, onClose, onSignUpClick,onAdminSignInClick }) => {
     setSuccess(false);
 
     try {
-      const response = await axiosInstance.post('http://localhost:5228/api/signin', {
+      const response = await axiosInstance.post('http://localhost:5228/api/admin/login', {
         email,
         password,
       });
@@ -33,7 +33,6 @@ const Login = ({ isOpen, onClose, onSignUpClick,onAdminSignInClick }) => {
       
       // Store the user's email in localStorage
       localStorage.setItem('userEmail', email);
-      localStorage.setItem('userId', response.data.userId)
       
       // If the response includes a token, store that too
       if (response.data.token) {
@@ -49,7 +48,7 @@ const Login = ({ isOpen, onClose, onSignUpClick,onAdminSignInClick }) => {
       clearForm(); // Clear the form after successful submission
       setTimeout(() => {
         onClose();
-        navigate('/customer-dashboard');
+        navigate('/admin-dashboard');
       }, 2000);
     } catch (err) {
       if (err.response?.data) {
@@ -65,19 +64,10 @@ const Login = ({ isOpen, onClose, onSignUpClick,onAdminSignInClick }) => {
   const handleOpenSignUp = () => {
     onClose(); // Close SignIn modal first
     clearForm(); // Clear form when switching to signup
-    if (onSignUpClick) {
-        onSignUpClick(); // Then open SignUp modal
+    if (onLoginClick) {
+        onLoginClick(); // Then open SignUp modal
     }
   };
-
-  const handleAdminSignin = () =>{
-    onClose();
-    clearForm();
-    if (onAdminSignInClick) {
-      onAdminSignInClick()
-    }
-
-  }
 
   // Return null after all hooks have been called
   if (!isOpen) return null;
@@ -128,7 +118,7 @@ const Login = ({ isOpen, onClose, onSignUpClick,onAdminSignInClick }) => {
                   <input
                     type="email"
                     id="Email"
-                    placeholder="johndoe@gmail.com"
+                    placeholder="johndoeeee@gmail.com"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     className={`border ${errors.email ? 'border-red-500' : 'border-neutral-400'} px-2 py-1 rounded-md`}
@@ -182,7 +172,7 @@ const Login = ({ isOpen, onClose, onSignUpClick,onAdminSignInClick }) => {
             </div>
 
             <div className="pt-4 text-neutral-400 flex items-center justify-center gap-3">
-              <hr className="w-1/7" /> <span>or Sign in as <a href="" onClick={(e) => {e.preventDefault(); handleAdminSignin();}} className='font-semibold'>Adminstrator</a></span> <hr className="w-1/4" />
+              <hr className="w-1/4" /> <span>or Sign in with</span> <hr className="w-1/4" />
             </div>
 
             <div className="flex justify-center items-center mt-4 gap-3">
@@ -212,4 +202,4 @@ const Login = ({ isOpen, onClose, onSignUpClick,onAdminSignInClick }) => {
   );
 };
 
-export default Login;
+export default AdminLogin;
