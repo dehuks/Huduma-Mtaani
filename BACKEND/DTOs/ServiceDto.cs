@@ -6,15 +6,6 @@ namespace BACKEND.DTOs
         public string ServiceDescription { get; set; }
     }
 
-    public class ServiceProviderDto
-    {
-        public string FullName { get; set; }
-        public string Email { get; set; }
-        public string Phone { get; set; }
-        public int ServiceId { get; set; }
-    }
-
-
     public class PaymentDto
     {
         public int OrderId { get; set; }

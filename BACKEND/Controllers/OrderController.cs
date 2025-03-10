@@ -65,5 +65,20 @@ namespace BACKEND.Controllers
                 CreatedOn = o.CreatedOn
             }).ToList();
         }
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<OrderResponseDto>>> GetAllOrders()
+        {   
+             var orders = await _context.Orders.ToListAsync();
+
+                return orders.Select(o => new OrderResponseDto
+            {
+                OrderId = o.OrderId,
+                Status = o.Status,
+                CreatedOn = o.CreatedOn
+             }).ToList();
+        }
+
+
+        
     }
 }
