@@ -4,14 +4,14 @@ import axiosInstance from '../../Constants/axiosInstance';
 import { Auth } from '../../Constants';
 import { useNavigate } from 'react-router-dom';
 
-const Login = ({ isOpen, onClose, onSignUpClick,onAdminSignInClick }) => {
+const Login = ({ isOpen, onClose, onSignUpClick, onAdminSignInClick }) => {
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
-  
+
   const clearForm = () => {
     setEmail('');
     setPassword('');
@@ -30,30 +30,33 @@ const Login = ({ isOpen, onClose, onSignUpClick,onAdminSignInClick }) => {
       });
 
       console.log('Signin Successful:', response.data);
-      
-      // Store the user's email in localStorage
+
+      // Store the user's email, token, and role in localStorage
       localStorage.setItem('userEmail', email);
-      localStorage.setItem('userId', response.data.userId)
-      
-      // If the response includes a token, store that too
-      if (response.data.token) {
-        localStorage.setItem('authToken', response.data.token);
-      }
-      
-      // If the response includes user data, store that too
-      if (response.data.user) {
-        localStorage.setItem('userData', JSON.stringify(response.data.user));
-      }
-      
+      localStorage.setItem('userId', response.data.userId);
+      localStorage.setItem('authToken', response.data.token);
+      localStorage.setItem('userRole', response.data.role); // Store the user's role
+
       setSuccess(true);
       clearForm(); // Clear the form after successful submission
-      setTimeout(() => {
-        onClose();
-        navigate('/customer-dashboard');
-      }, 2000);
+
+      // Redirect based on the user's role
+      if (response.data.role === 'Customer') {
+        setTimeout(() => {
+          onClose();
+          navigate('/customer-dashboard'); // Redirect to Customer Dashboard
+        }, 2000);
+      } else if (response.data.role === 'ServiceProvider') {
+        setTimeout(() => {
+          onClose();
+          navigate('/serviceprovider-dashbooard'); // Redirect to Service Provider Dashboard
+        }, 2000);
+      } else {
+        setErrors({ general: 'Unknown user role. Please contact support.' });
+      }
     } catch (err) {
       if (err.response?.data) {
-        setErrors({general: err.response.data});
+        setErrors({ general: err.response.data });
       } else {
         setErrors({ general: 'Sign in Failed' });
       }
@@ -66,18 +69,17 @@ const Login = ({ isOpen, onClose, onSignUpClick,onAdminSignInClick }) => {
     onClose(); // Close SignIn modal first
     clearForm(); // Clear form when switching to signup
     if (onSignUpClick) {
-        onSignUpClick(); // Then open SignUp modal
+      onSignUpClick(); // Then open SignUp modal
     }
   };
 
-  const handleAdminSignin = () =>{
+  const handleAdminSignin = () => {
     onClose();
     clearForm();
     if (onAdminSignInClick) {
-      onAdminSignInClick()
+      onAdminSignInClick();
     }
-
-  }
+  };
 
   // Return null after all hooks have been called
   if (!isOpen) return null;
@@ -178,11 +180,25 @@ const Login = ({ isOpen, onClose, onSignUpClick,onAdminSignInClick }) => {
                     {loading ? 'Signing in...' : 'Sign in'}
                   </button>
                 </div>
-              </form>              
+              </form>
             </div>
 
             <div className="pt-4 text-neutral-400 flex items-center justify-center gap-3">
-              <hr className="w-1/7" /> <span>or Sign in as <a href="" onClick={(e) => {e.preventDefault(); handleAdminSignin();}} className='font-semibold'>Adminstrator</a></span> <hr className="w-1/4" />
+              <hr className="w-1/7" />{' '}
+              <span>
+                or Sign in as{' '}
+                <a
+                  href=""
+                  onClick={(e) => {
+                    e.preventDefault();
+                    handleAdminSignin();
+                  }}
+                  className="font-semibold"
+                >
+                  Adminstrator
+                </a>
+              </span>{' '}
+              <hr className="w-1/4" />
             </div>
 
             <div className="flex justify-center items-center mt-4 gap-3">

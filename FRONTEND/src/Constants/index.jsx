@@ -105,6 +105,14 @@ export const DashServices = [
   {icon:<Bike/>,text: "Errands"},
 
 ];
+export const ServiceProviderDashServices = [
+  {icon:<Wrench/>,text: "All Orders"},
+  {icon:<Cable/>,text: "Pending Orders"},
+  {icon:<Shirt/>,text: "Completed Orders"},
+  {icon:<Bike/>,text: "Payments"},
+
+];
+
 export const AdminDashServices = [
   {icon:<Wrench/>,text: "Add Service"},
   {icon:<Cable/>,text: "View Services"},
