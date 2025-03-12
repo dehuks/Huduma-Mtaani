@@ -119,16 +119,7 @@ const CustDashboard = () => {
                 <p className='text-Icon-bg'><LogOut /></p>
                 <p onClick={handleLogout}>Logout</p>
               </div>
-              <div className='mt-5 px-2'>
-                <Link to="/admin-dashboard" className="hover:text-blue-600 transition-colors">
-                  Admin Dashboard
-                </Link>
-              </div>
-              <div className='mt-5 px-2'>
-                <Link to="/serviceprovider-dashbooard" className="hover:text-blue-600 transition-colors">
-                  Service Provider Dashboard
-                </Link>
-              </div>
+              
             </div>
           </div>
         )}

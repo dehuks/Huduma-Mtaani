@@ -71,18 +71,7 @@ const ServiceProviderDash = () => {
                 <p className='text-Icon-bg'><LogOut /></p>
                 <p onClick={handleLogout}>Logout</p>
               </div>
-              <div className='mt-5'>
-                <Link to="/admin-dashboard">
-                Admin Dashboard
-
-                </Link>
-              </div>
-              <div className='mt-5'>
-                <Link to="/serviceprovider-dashbooard">
-                Service Provider Dashboard
-
-                </Link>
-              </div>
+              
             </div>
           </div>
         )}

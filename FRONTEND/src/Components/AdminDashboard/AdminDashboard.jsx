@@ -5,14 +5,19 @@ import ProfileImage from '../../assets/images/profile-pictures/User3.png';
 import { useNavigate } from 'react-router-dom';
 import ServiceProvider from '../../Constants/ServiceProvider';
 import { Link } from 'react-router-dom';
-import AddService from './AddService'; // Import the AddService component
+import AddService from './AddService';
 import ViewServices from './ViewServices';
+import AddServiceProvider from './AddServiceProvider';
+import ViewServiceProviders from './ViewServiceProviders'; // Import the ViewServiceProviders component
 
 const AdminDashboard = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [selectedService, setSelectedService] = useState(null); // To track selected service
   const [showAddService, setShowAddService] = useState(false); // To track if "Add Service" is selected
-  const [showViewServices, setShowViewServices] = useState(false); // To track if "View Services" is selected  const navigate = useNavigate();
+  const [showViewServices, setShowViewServices] = useState(false); // To track if "View Services" is selected
+  const [showAddServiceProvider, setShowAddServiceProvider] = useState(false); // To track if "Add Service Provider" is selected
+  const [showViewServiceProviders, setShowViewServiceProviders] = useState(false); // New state for View Service Providers
+  const navigate = useNavigate();
   const userEmail = localStorage.getItem('userEmail');
 
   const handleLogout = () => {
@@ -22,24 +27,41 @@ const AdminDashboard = () => {
   };
 
   // Function to handle service selection
- // Function to handle service selection
- const handleServiceClick = (serviceName) => {
-  if (serviceName === "Add Service") {
-    setShowAddService(true);
-    setShowViewServices(false);
-    setSelectedService(null);
-  } else if (serviceName === "View Services") {
-    setShowViewServices(true);
-    setShowAddService(false);
-    setSelectedService(null);
-  } else {
-    setSelectedService(serviceName);
-    setShowAddService(false);
-    setShowViewServices(false);
-  }
-}; 
+  const handleServiceClick = (serviceName) => {
+    if (serviceName === "Add Service") {
+      setShowAddService(true);
+      setShowViewServices(false);
+      setShowAddServiceProvider(false);
+      setShowViewServiceProviders(false);
+      setSelectedService(null);
+    } else if (serviceName === "View Services") {
+      setShowViewServices(true);
+      setShowAddService(false);
+      setShowAddServiceProvider(false);
+      setShowViewServiceProviders(false);
+      setSelectedService(null);
+    } else if (serviceName === "Add Service Provider") {
+      setShowAddServiceProvider(true);
+      setShowAddService(false);
+      setShowViewServices(false);
+      setShowViewServiceProviders(false);
+      setSelectedService(null);
+    } else if (serviceName === "View Service Providers") {
+      setShowViewServiceProviders(true);
+      setShowAddService(false);
+      setShowViewServices(false);
+      setShowAddServiceProvider(false);
+      setSelectedService(null);
+    } else {
+      setSelectedService(serviceName);
+      setShowAddService(false);
+      setShowViewServices(false);
+      setShowAddServiceProvider(false);
+      setShowViewServiceProviders(false);
+    }
+  }; 
 
-return (
+  return (
     <div className='relative bg-neutral-100 flex'>
       {/* Sidebar */}
       <div className={`bg-white h-screen border-r border-neutral-200 transition-all duration-300 ${isSidebarOpen ? 'w-[250px]' : 'w-0 overflow-hidden'}`}>
@@ -60,7 +82,7 @@ return (
               {AdminDashServices.map((service, index) => (
                 <div key={index} className='py-2'>
                   <li 
-                    className={`flex gap-3 hover:bg-Cards hover:py-1 hover:px-1 hover:rounded-md cursor-pointer ${selectedService === service.text ? 'bg-Cards py-1 px-1 rounded-md font-medium' : ''}`}
+                    className={`flex gap-3 hover:bg-Cards hover:py-1 hover:px-1 hover:rounded-md cursor-pointer ${selectedService === service.text || (service.text === "Add Service" && showAddService) || (service.text === "View Services" && showViewServices) ? 'bg-Cards py-1 px-1 rounded-md font-medium' : ''}`}
                     onClick={() => handleServiceClick(service.text)}
                   >
                     <p className='text-Icon-bg'>{service.icon}</p> {service.text}
@@ -78,7 +100,7 @@ return (
                 {AdminDashServiceProviders.map((service, index) => (
                   <div key={index} className='py-2'>
                     <li 
-                      className={`flex gap-3 hover:bg-Cards hover:py-1 hover:px-1 hover:rounded-md cursor-pointer ${selectedService === service.text ? 'bg-Cards py-1 px-1 rounded-md font-medium' : ''}`}
+                      className={`flex gap-3 hover:bg-Cards hover:py-1 hover:px-1 hover:rounded-md cursor-pointer ${selectedService === service.text || (service.text === "Add Service Provider" && showAddServiceProvider) || (service.text === "View Service Providers" && showViewServiceProviders) ? 'bg-Cards py-1 px-1 rounded-md font-medium' : ''}`}
                       onClick={() => handleServiceClick(service.text)}
                     >
                       <p className='text-Icon-bg'>{service.icon}</p> {service.text}
@@ -108,11 +130,7 @@ return (
               <p className='text-Icon-bg'><LogOut /></p>
               <p onClick={handleLogout}>Logout</p>
             </div>
-            <div className='mt-5'>
-              <Link to="/admin-dashboard">
-                Admin Dashboard
-              </Link>
-            </div>
+            
           </div>
         )}
       </div>
@@ -156,6 +174,10 @@ return (
             <AddService /> // Display the AddService form
           ) : showViewServices ? (
             <ViewServices /> // Display the ViewServices component
+          ) : showAddServiceProvider ? (
+            <AddServiceProvider /> // Display the AddServiceProvider component
+          ) : showViewServiceProviders ? (
+            <ViewServiceProviders /> // Display the ViewServiceProviders component
           ) : selectedService ? (
             <ServiceProvider selectedService={selectedService} />
           ) : (
