@@ -74,6 +74,7 @@ namespace BACKEND.Controllers
             {
                 OrderId = o.OrderId,
                 Status = o.Status,
+                Amount = o.Amount,
                 CreatedOn = o.CreatedOn
              }).ToList();
         }
