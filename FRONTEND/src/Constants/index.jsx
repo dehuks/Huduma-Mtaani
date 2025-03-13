@@ -203,3 +203,171 @@ export const ProviderInsights = [
     Icon: <Calendar/>
   }
 ]
+
+//import images
+import cleanerImage from '../assets/images/cleaner_2.jpeg';
+import plumpImage from '../assets/images/plumber.jpeg';
+import electImage from '../assets/images/stima.jpeg';
+import paintImage from '../assets/images/elctr.jpg';
+import gardenImage from '../assets/images/elctr1.jpeg';
+import cleanImage from '../assets/images/fua.jpg';
+import electricianImage from '../assets/images/elctr2.jpeg';
+import fuaImage from '../assets/images/Mama_Fua_3_big.jpg';
+import houseImage from '../assets/images/cleaner.jpeg';
+
+// Mock notifications data
+export  const notifications = [
+  {
+    id: 1,
+    type: 'booking',
+    message: 'Your cleaning service has been confirmed',
+    time: '5 minutes ago',
+    read: false
+  },
+  {
+    id: 2,
+    type: 'reminder',
+    message: 'Upcoming plumbing service tomorrow at 2 PM',
+    time: '1 hour ago',
+    read: false
+  },
+  {
+    id: 3,
+    type: 'review',
+    message: 'Please rate your recent electrical service',
+    time: '2 hours ago',
+    read: true
+  }
+];
+
+// Mock user data
+export const userData = {
+  name: 'John Doe',
+  email: 'john.doe@example.com',
+  avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150'
+};
+
+
+export const upcomingBookings = [
+  { id: 1,
+    service: 'Cleaning',
+    provider: 'Jane Doe',
+    date: '2024-03-20',
+    time: '09:00 AM',
+    status: 'confirmed'
+  },
+  {
+    id: 2,
+    service: 'Plumbing',
+    provider: 'John Smith',
+    date: '2024-03-22',
+    time: '02:00 PM',
+    status: 'pending'
+  }
+];
+
+// Updated serviceProviders array with 9 services
+export const serviceProviders = [
+  {
+    id: 1,
+    name: 'Jane Doe',
+    service: 'Cleaning',
+    rating: 4.8,
+    price: '1000-2000',
+    image: cleanerImage
+  },
+  {
+    id: 2,
+    name: 'John Smith',
+    service: 'Plumbing',
+    rating: 4.5,
+    price: '1500-3000',
+    image: plumpImage
+  },
+  {
+    id: 3,
+    name: 'Alice Johnson',
+    service: 'Electrical',
+    rating: 4.7,
+    price: '2000-4000',
+    image: electImage
+  },
+  {
+    id: 4,
+    name: 'Bob Brown',
+    service: 'Appliance Repair',
+    rating: 4.6,
+    price: '2500-5000',
+    image: paintImage
+  },
+  {
+    id: 5,
+    name: 'Charlie Davis',
+    service: 'Mama fua',
+    rating: 4.4,
+    price: '3000-6000',
+    image: cleanImage
+  },
+  {
+    id: 6,
+    name: 'Eve White',
+    service: 'Electrical',
+    rating: 4.9,
+    price: '1000-2500',
+    image: gardenImage
+  },
+  {
+    id: 7,
+    name: 'Frank Wilson',
+    service: 'Electrical',
+    rating: 4.3,
+    price: '2000-4500',
+    image: electricianImage
+  },
+  {
+    id: 8,
+    name: 'Grace Lee',
+    service: 'Mama Fua',
+    rating: 4.7,
+    price: '1500-3500',
+    image: fuaImage
+  },
+  {
+    id: 9,
+    name: 'Henry Moore',
+    service: 'Carpet Cleaning',
+    rating: 4.5,
+    price: '5000-10000',
+    image: houseImage
+  }
+];
+
+export const analyticsData = {
+  serviceUsage: [
+    { service: 'Cleaning', count: 45, percentage: 45 },
+    { service: 'Plumbing', count: 30, percentage: 30 },
+    { service: 'Electrical', count: 15, percentage: 15 },
+    { service: 'Painting', count: 10, percentage: 10 }
+  ],
+  monthlyBookings: [
+    { month: 'Jan', count: 20 },
+    { month: 'Feb', count: 25 },
+    { month: 'Mar', count: 35 },
+    { month: 'Apr', count: 30 },
+    { month: 'May', count: 40 },
+    { month: 'Jun', count: 45 }
+  ],
+  ratingDistribution: [
+    { stars: 5, count: 150 },
+    { stars: 4, count: 100 },
+    { stars: 3, count: 30 },
+    { stars: 2, count: 15 },
+    { stars: 1, count: 5 }
+  ],
+  stats: {
+    totalBookings: 300,
+    completedServices: 285,
+    averageRating: 4.5,
+    totalSpent: 45000
+  }
+};
