@@ -267,77 +267,32 @@ export const upcomingBookings = [
 ];
 
 // Updated serviceProviders array with 9 services
-export const serviceProviders = [
+export const serviceProvidersItems = [
   {
-    id: 1,
-    name: 'Jane Doe',
-    service: 'Cleaning',
-    rating: 4.8,
-    price: '1000-2000',
     image: cleanerImage
   },
   {
-    id: 2,
-    name: 'John Smith',
-    service: 'Plumbing',
-    rating: 4.5,
-    price: '1500-3000',
-    image: plumpImage
+   image: plumpImage
   },
   {
-    id: 3,
-    name: 'Alice Johnson',
-    service: 'Electrical',
-    rating: 4.7,
-    price: '2000-4000',
     image: electImage
   },
   {
-    id: 4,
-    name: 'Bob Brown',
-    service: 'Appliance Repair',
-    rating: 4.6,
-    price: '2500-5000',
     image: paintImage
   },
   {
-    id: 5,
-    name: 'Charlie Davis',
-    service: 'Mama fua',
-    rating: 4.4,
-    price: '3000-6000',
     image: cleanImage
   },
   {
-    id: 6,
-    name: 'Eve White',
-    service: 'Electrical',
-    rating: 4.9,
-    price: '1000-2500',
     image: gardenImage
   },
   {
-    id: 7,
-    name: 'Frank Wilson',
-    service: 'Electrical',
-    rating: 4.3,
-    price: '2000-4500',
     image: electricianImage
   },
   {
-    id: 8,
-    name: 'Grace Lee',
-    service: 'Mama Fua',
-    rating: 4.7,
-    price: '1500-3500',
     image: fuaImage
   },
   {
-    id: 9,
-    name: 'Henry Moore',
-    service: 'Carpet Cleaning',
-    rating: 4.5,
-    price: '5000-10000',
     image: houseImage
   }
 ];
