@@ -18,9 +18,17 @@ import {
   MessageSquare,
   CheckCircle
 } from 'lucide-react';
-import { analyticsData, notifications, serviceProviders, upcomingBookings, userData } from '../../Constants';
+import { analyticsData, notifications, upcomingBookings, userData } from '../../Constants';
 
 const CustDashboard = () => {
+  // Retrieve user data from localStorage
+  const userData = {
+    id: localStorage.getItem('userId'), // Assuming 'userId' is stored in localStorage
+    email: localStorage.getItem('userEmail'), // Assuming 'userEmail' is stored in localStorage
+    avatar: 'https://via.placeholder.com/150', // Fallback avatar
+    name: 'User', // Fallback name
+  };
+
   const [activeTab, setActiveTab] = useState('search');
   const [searchQuery, setSearchQuery] = useState('');
   const [showFilters, setShowFilters] = useState(false);
@@ -29,13 +37,127 @@ const CustDashboard = () => {
   const [unreadNotifications, setUnreadNotifications] = useState(
     notifications.filter(n => !n.read).length
   );
+  const [serviceProviders, setServiceProviders] = useState([]);
+  const [ratings, setRatings] = useState({}); // Store ratings by ratingId
+  const [selectedProvider, setSelectedProvider] = useState(null); // Track selected provider for booking
+  const [amount, setAmount] = useState(''); // Amount input for booking
+  const [orders, setOrders] = useState([]); // State to store customer orders
 
   const maxBookings = Math.max(...analyticsData.monthlyBookings.map(b => b.count));
   const maxRatings = Math.max(...analyticsData.ratingDistribution.map(r => r.count));
   
   const notificationRef = useRef(null);
   const userMenuRef = useRef(null);
+
+  // Fetch service providers from the API
+  useEffect(() => {
+    const fetchServiceProviders = async () => {
+      try {
+        const response = await fetch('http://localhost:5228/api/service-providers');
+        if (!response.ok) {
+          throw new Error('Failed to fetch service providers');
+        }
+        const data = await response.json();
+        setServiceProviders(data);
+
+        // Fetch ratings for each provider
+        data.forEach(provider => {
+          if (provider.ratingId) {
+            fetchRating(provider.ratingId);
+          }
+        });
+      } catch (error) {
+        console.error('Error fetching service providers:', error);
+      }
+    };
+
+    fetchServiceProviders();
+  }, []);
+
+  // Fetch orders for the logged-in customer
+  useEffect(() => {
+    if (activeTab === 'history' || activeTab === 'analytics') {
+      const fetchOrders = async () => {
+        try {
+          const response = await fetch(`http://localhost:5228/api/orders/customer/${userData.id}`);
+          if (!response.ok) {
+            throw new Error('Failed to fetch orders');
+          }
+          const data = await response.json();
+          setOrders(data); // Set the fetched orders to state
+        } catch (error) {
+          console.error('Error fetching orders:', error);
+        }
+      };
+
+      fetchOrders();
+    }
+  }, [activeTab, userData.id]); // Fetch orders when the activeTab changes to 'history' or 'analytics'
+
+  // Fetch rating by ratingId
+  const fetchRating = async (ratingId) => {
+    try {
+      const response = await fetch(`http://localhost:5228/api/ratings/${ratingId}`);
+      if (!response.ok) {
+        throw new Error('Failed to fetch rating');
+      }
+      const data = await response.json();
+      setRatings(prevRatings => ({
+        ...prevRatings,
+        [ratingId]: data.rate, // Store the rating value
+      }));
+    } catch (error) {
+      console.error('Error fetching rating:', error);
+    }
+  };
+
+  // Calculate analytics data
+  const totalBookings = orders.length;
+  const completedBookings = orders.filter(order => order.status === 'completed').length;
+  const totalSpent = orders.reduce((sum, order) => sum + order.amount, 0);
+
+  // Handle booking
+  const handleBookNow = (provider) => {
+    setSelectedProvider(provider); // Set the selected provider
+    setAmount(''); // Reset amount input
+  };
+
+  // Submit booking order
+  const submitOrder = async () => {
+    if (!selectedProvider || !amount) {
+      alert('Please enter a valid amount.');
+      return;
+    }
   
+    const orderData = {
+      customerId: userData.id, // Logged-in user's ID from localStorage
+      serviceProviderId: selectedProvider.serviceProviderId, // Selected provider's ID
+      amount: parseFloat(amount), // Convert amount to a number
+    };
+  
+    try {
+      const response = await fetch('http://localhost:5228/api/orders', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(orderData),
+      });
+  
+      if (!response.ok) {
+        throw new Error('Failed to create order');
+      }
+  
+      const result = await response.json();
+      alert('Order created successfully!');
+      setSelectedProvider(null); // Reset selected provider
+      setAmount(''); // Reset amount input
+    } catch (error) {
+      console.error('Error creating order:', error);
+      alert('Failed to create order. Please try again.');
+    }
+  };
+
   // Close dropdowns when clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -60,7 +182,6 @@ const CustDashboard = () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
-  
 
   const handleNotificationClick = () => {
     setShowNotifications(!showNotifications);
@@ -157,7 +278,7 @@ const CustDashboard = () => {
                       <p className="text-sm font-semibold">{userData.name}</p>
                       <p className="text-xs text-gray-500">{userData.email}</p>
                     </div>
-                    <a
+                    {/* <a
                       href="#profile"
                       className="px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 flex items-center"
                     >
@@ -170,7 +291,7 @@ const CustDashboard = () => {
                     >
                       <Settings className="w-4 h-4 mr-2" />
                       Settings
-                    </a>
+                    </a> */} 
                     <div className="border-t border-gray-100">
                       <a
                         href="#logout"
@@ -290,27 +411,91 @@ const CustDashboard = () => {
             {/* Service Cards Grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {serviceProviders.map((provider) => (
-                <div key={provider.id} className="bg-white rounded-lg shadow-sm overflow-hidden">
+                <div key={provider.serviceProviderId} className="bg-white rounded-lg shadow-sm overflow-hidden">
                   <img
-                    src={provider.image}
-                    alt={provider.name}
+                    src={provider.image} // Fallback image if provider.image is null
+                    alt={provider.fullName}
                     className="w-full h-48 object-cover"
                   />
                   <div className="p-4">
-                    <h3 className="text-lg font-semibold">{provider.name}</h3>
-                    <p className="text-gray-600">{provider.service}</p>
+                    <h3 className="text-lg font-semibold">{provider.fullName}</h3>
+                    <p className="text-gray-600 hidden">{provider.service || 'Service not specified'}</p>
                     <div className="flex items-center mt-2">
                       <Star className="w-5 h-5 text-yellow-400 fill-current" />
-                      <span className="ml-1">{provider.rating}</span>
+                      <span className="ml-1">
+                        {provider.ratingId ? ratings[provider.ratingId] || 'Loading...' : 'No rating'}
+                      </span>
                     </div>
-                    <p className="text-gray-600 mt-2">KSH {provider.price}</p>
-                    <button className="mt-4 w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition-colors">
+                    <button 
+                      className="mt-4 w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition-colors"
+                      onClick={() => handleBookNow(provider)}
+                    >
                       Book Now
                     </button>
                   </div>
                 </div>
               ))}
             </div>
+
+            {/* Booking Form Modal */}
+            {selectedProvider && (
+              <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+                <div className="bg-white p-6 rounded-lg shadow-lg w-96">
+                  <h3 className="text-lg font-semibold mb-4">Book {selectedProvider.fullName}</h3>
+                  <div className="space-y-4">
+                    {/* Customer ID Field */}
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700">Customer ID</label>
+                      <input
+                        type="text"
+                        value={userData.id} // Logged-in user's ID from localStorage
+                        readOnly
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-100"
+                      />
+                    </div>
+
+                    {/* Service Provider ID Field */}
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700">Service Provider ID</label>
+                      <input
+                        type="text"
+                        value={selectedProvider.serviceProviderId} // Selected provider's ID
+                        readOnly
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-100"
+                      />
+                    </div>
+
+                    {/* Amount Field */}
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700">Amount</label>
+                      <input
+                        type="number"
+                        value={amount}
+                        onChange={(e) => setAmount(e.target.value)}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        placeholder="Enter amount"
+                      />
+                    </div>
+
+                    {/* Action Buttons */}
+                    <div className="flex justify-end space-x-4">
+                      <button
+                        className="px-4 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400"
+                        onClick={() => setSelectedProvider(null)}
+                      >
+                        Cancel
+                      </button>
+                      <button
+                        className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+                        onClick={submitOrder}
+                      >
+                        Confirm
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
         )}
 
@@ -361,37 +546,32 @@ const CustDashboard = () => {
         {/* History Section */}
         {activeTab === 'history' && (
           <div className="space-y-4">
-            <div className="bg-white rounded-lg shadow-sm p-4">
-              <div className="flex items-center justify-between">
-                <div>
-                  <h3 className="text-lg font-semibold">House Cleaning</h3>
-                  <p className="text-gray-600">Jane Doe</p>
-                  <div className="flex items-center mt-2 space-x-4">
-                    <span className="flex items-center text-gray-500">
-                      <Calendar className="w-4 h-4 mr-1" />
-                      2024-03-15
-                    </span>
-                    <span className="flex items-center text-gray-500">
-                      <MapPin className="w-4 h-4 mr-1" />
-                      Completed
-                    </span>
+            {orders.map((order) => (
+              <div key={order.orderId} className="bg-white rounded-lg shadow-sm p-4">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <h3 className="text-lg font-semibold">Order #{order.orderId}</h3>
+                    <p className="text-gray-600">Status: {order.status}</p>
+                    <div className="flex items-center mt-2 space-x-4">
+                      <span className="flex items-center text-gray-500">
+                        <Calendar className="w-4 h-4 mr-1" />
+                        {new Date(order.createdOn).toLocaleDateString()}
+                      </span>
+                      <span className="flex items-center text-gray-500">
+                        <Clock className="w-4 h-4 mr-1" />
+                        {new Date(order.createdOn).toLocaleTimeString()}
+                      </span>
+                    </div>
                   </div>
-                </div>
-                <div className="flex flex-col items-end">
-                  <div className="flex items-center mb-2">
-                    {[1, 2, 3, 4, 5].map((star) => (
-                      <Star
-                        key={star}
-                        className="w-5 h-5 text-yellow-400 fill-current"
-                      />
-                    ))}
+                  <div className="flex flex-col items-end">
+                    <p className="text-lg font-semibold">KSH {order.amount.toFixed(2)}</p>
+                    <button className="text-blue-600 hover:text-blue-700">
+                      View Details
+                    </button>
                   </div>
-                  <button className="text-blue-600 hover:text-blue-700">
-                    View Details
-                  </button>
                 </div>
               </div>
-            </div>
+            ))}
           </div>
         )}
 
@@ -405,7 +585,7 @@ const CustDashboard = () => {
                   <h3 className="text-lg font-semibold text-gray-700">Total Bookings</h3>
                   <Calendar className="w-6 h-6 text-blue-600" />
                 </div>
-                <p className="text-3xl font-bold mt-2">{analyticsData.stats.totalBookings}</p>
+                <p className="text-3xl font-bold mt-2">{totalBookings}</p>
                 <p className="text-sm text-gray-500 mt-1">All time</p>
               </div>
               <div className="bg-white p-6 rounded-lg shadow-sm">
@@ -413,23 +593,15 @@ const CustDashboard = () => {
                   <h3 className="text-lg font-semibold text-gray-700">Completed</h3>
                   <TrendingUp className="w-6 h-6 text-green-600" />
                 </div>
-                <p className="text-3xl font-bold mt-2">{analyticsData.stats.completedServices}</p>
+                <p className="text-3xl font-bold mt-2">{completedBookings}</p>
                 <p className="text-sm text-gray-500 mt-1">Services completed</p>
-              </div>
-              <div className="bg-white p-6 rounded-lg shadow-sm">
-                <div className="flex items-center justify-between">
-                  <h3 className="text-lg font-semibold text-gray-700">Average Rating</h3>
-                  <Star className="w-6 h-6 text-yellow-400" />
-                </div>
-                <p className="text-3xl font-bold mt-2">{analyticsData.stats.averageRating}</p>
-                <p className="text-sm text-gray-500 mt-1">Out of 5</p>
               </div>
               <div className="bg-white p-6 rounded-lg shadow-sm">
                 <div className="flex items-center justify-between">
                   <h3 className="text-lg font-semibold text-gray-700">Total Spent</h3>
                   <PieChart className="w-6 h-6 text-purple-600" />
                 </div>
-                <p className="text-3xl font-bold mt-2">KSH {analyticsData.stats.totalSpent}</p>
+                <p className="text-3xl font-bold mt-2">KSH {totalSpent.toFixed(2)}</p>
                 <p className="text-sm text-gray-500 mt-1">All services</p>
               </div>
             </div>
