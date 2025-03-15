@@ -4,6 +4,8 @@ using BACKEND.Models;
 using BACKEND.DTOs;
 using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace BACKEND.Controllers
 {
@@ -19,24 +21,28 @@ namespace BACKEND.Controllers
         }
 
         [HttpPost]
-        
         public async Task<ActionResult<Payment>> CreatePayment(PaymentDto paymentDto)
         {
             var order = await _context.Orders.FindAsync(paymentDto.OrderId);
 
-            if (order == null || order.Status == "completed")
+            if (order == null)
             {
-                return BadRequest("Invalid order or already completed.");
+                return BadRequest("Invalid order.");
+            }
+            
+            if (order.Status == "completed")
+            {
+                return BadRequest("Order is already completed.");
             }
 
             var payment = new Payment
             {
                 OrderId = paymentDto.OrderId,
                 Status = "Paid",
-                PaymentDate = DateTime.UtcNow
+                PaymentDate = DateTime.UtcNow,
+                UpdatedOn = DateTime.UtcNow
             };
 
-            order.Status = "completed"; // Mark order as completed
             _context.Payments.Add(payment);
             await _context.SaveChangesAsync();
 
@@ -54,6 +60,54 @@ namespace BACKEND.Controllers
             }
 
             return payment;
+        }
+
+        // Get all payments made by a specific customer
+        [HttpGet("customer/{customerId}")]
+        public async Task<ActionResult<IEnumerable<PaymentResponseDto>>> GetPaymentsByCustomer(int customerId)
+        {
+            var payments = await _context.Payments
+                .Include(p => p.Order)
+                .Where(p => p.Order != null && p.Order.CustomerId == customerId)
+                .ToListAsync();
+
+            if (!payments.Any())
+            {
+                return NotFound("No payments found for this customer.");
+            }
+
+            return payments.Select(p => new PaymentResponseDto
+            {
+                PaymentId = p.PaymentId,
+                OrderId = p.OrderId ?? 0, // Handle potential null
+                Amount = p.Order?.Amount ?? 0,
+                Status = p.Status,
+                PaymentDate = p.PaymentDate
+            }).ToList();
+        }
+
+        // Get all payments received by a specific service provider
+        [HttpGet("service-provider/{serviceProviderId}")]
+        public async Task<ActionResult<IEnumerable<PaymentResponseDto>>> GetPaymentsByServiceProvider(int serviceProviderId)
+        {
+            var payments = await _context.Payments
+                .Include(p => p.Order)
+                .Where(p => p.Order != null && p.Order.ServiceProviderId == serviceProviderId)
+                .ToListAsync();
+
+            if (!payments.Any())
+            {
+                return NotFound("No payments found for this service provider.");
+            }
+
+            return payments.Select(p => new PaymentResponseDto
+            {
+                PaymentId = p.PaymentId,
+                OrderId = p.OrderId ?? 0, 
+                Amount = p.Order?.Amount ?? 0,
+                Status = p.Status,
+                PaymentDate = p.PaymentDate
+            }).ToList();
         }
     }
 }
