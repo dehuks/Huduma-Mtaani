@@ -6,6 +6,11 @@ namespace BACKEND.DTOs
         public int? ServiceProviderId { get; set; }
         public decimal Amount { get; set; }
     }
+     public class UpdateOrderStatusDto
+    {
+        public string Status { get; set; }
+    }
+    
 
     public class OrderResponseDto
     {

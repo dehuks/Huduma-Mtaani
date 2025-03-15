@@ -4,12 +4,13 @@ using BACKEND.Models;
 using BACKEND.DTOs;
 using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace BACKEND.Controllers
 {
     [Route("api/orders")]
     [ApiController]
-   
     public class OrdersController : ControllerBase
     {
         private readonly HudumaDbContext _context;
@@ -20,7 +21,6 @@ namespace BACKEND.Controllers
         }
 
         [HttpPost]
-        
         public async Task<ActionResult<Order>> CreateOrder(OrderDto orderDto)
         {
             var order = new Order
@@ -50,7 +50,6 @@ namespace BACKEND.Controllers
         }
 
         [HttpGet("customer/{customerId}")]
-        
         public async Task<ActionResult<IEnumerable<OrderResponseDto>>> GetCustomerOrders(int customerId)
         {
             var orders = await _context.Orders
@@ -65,21 +64,42 @@ namespace BACKEND.Controllers
                 CreatedOn = o.CreatedOn
             }).ToList();
         }
+
         [HttpGet]
         public async Task<ActionResult<IEnumerable<OrderResponseDto>>> GetAllOrders()
         {   
-             var orders = await _context.Orders.ToListAsync();
+            var orders = await _context.Orders.ToListAsync();
 
-                return orders.Select(o => new OrderResponseDto
+            return orders.Select(o => new OrderResponseDto
             {
                 OrderId = o.OrderId,
                 Status = o.Status,
                 Amount = o.Amount,
                 CreatedOn = o.CreatedOn
-             }).ToList();
+            }).ToList();
         }
 
+        // PATCH: api/orders/{orderId}/status
+        [HttpPatch("{orderId}/status")]
+        public async Task<IActionResult> UpdateOrderStatus(int orderId, [FromBody] UpdateOrderStatusDto statusDto)
+        {
+            var order = await _context.Orders.FindAsync(orderId);
+            if (order == null)
+            {
+                return NotFound();
+            }
 
-        
+            // Ensure the status is valid
+            var validStatuses = new List<string> { "pending", "in progress", "completed" };
+            if (!validStatuses.Contains(statusDto.Status.ToLower()))
+            {
+                return BadRequest("Invalid status. Allowed values: 'pending', 'in progress', 'completed'.");
+            }
+
+            order.Status = statusDto.Status;
+            await _context.SaveChangesAsync();
+
+            return NoContent();
+        }
     }
 }
