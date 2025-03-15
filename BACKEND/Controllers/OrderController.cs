@@ -96,6 +96,16 @@ namespace BACKEND.Controllers
                 return BadRequest("Invalid status. Allowed values: 'pending', 'in progress', 'completed'.");
             }
 
+            // Prevent marking as completed unless paid
+            if (statusDto.Status.ToLower() == "completed")
+            {
+                var paymentExists = await _context.Payments.AnyAsync(p => p.OrderId == orderId && p.Status == "Paid");
+                if (!paymentExists)
+                {
+                    return BadRequest("Order cannot be marked as completed without a successful payment.");
+                }
+            }
+
             order.Status = statusDto.Status;
             await _context.SaveChangesAsync();
 
