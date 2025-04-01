@@ -10,7 +10,7 @@ const RatingStars = ({ rating }) => {
         {[...Array(totalStars)].map((_, index) => (
           <Star 
             key={index} 
-            size={16} 
+            size={24} 
             className={index < rating ? "text-CTA-card fill-CTA-card" : "text-black fill-Gray"} 
           />
         ))}
