@@ -7,9 +7,11 @@ import user2 from "../assets/images/profile-pictures/User2.png";
 import user3 from "../assets/images/profile-pictures/User3.png";
 import user4 from "../assets/images/profile-pictures/User4.png";
 import user5 from "../assets/images/profile-pictures/User5.png";
+import logo from "../assets/images/Logo.png"
 
-
-
+export const Logo = [
+  {image:logo}
+]
 
 
 export const steps = [

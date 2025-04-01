@@ -3,6 +3,7 @@ import { Menu, X } from "lucide-react"; // Import icons
 import Login from "../Auth/Login";
 import SignUp from "../Auth/SignUp";
 import AdminLogin from "../AdminAuth/AdminLogin";
+import { Logo } from "../../Constants";
 
 const NavBar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -47,8 +48,16 @@ const NavBar = () => {
       <div className="flex justify-center">
         <div className="bg-CTA-card w-[800px] flex justify-between items-center mt-5 mx-20 rounded-xl px-4 py-3">
           {/* Brand Name */}
+          <div className="flex gap-2 items-center">
+            <div>
+              {Logo.map((logo, index)=>(
+                <img key={index} src={logo.image} alt="" className="w-[50px]" />
+              ))}
+
+            </div>
           <p className="text-white md:text-3xl text-2xl font-medium">Huduma Mtaani</p>
 
+          </div>
           {/* Desktop Navigation */}
           <ul className="hidden md:flex items-center md:gap-12 gap-4 text-white">
             <li>Home</li>
