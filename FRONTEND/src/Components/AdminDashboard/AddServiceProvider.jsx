@@ -14,6 +14,9 @@ const AddServiceProvider = () => {
 
   const [formData, setFormData] = useState(initialFormState);
   const [services, setServices] = useState([]);
+  const [profilePhoto, setProfilePhoto] = useState(null);
+  const [photoPreview, setPhotoPreview] = useState(null);
+  const [photoError, setPhotoError] = useState('');
   const [status, setStatus] = useState({
     loading: false,
     error: '',
@@ -55,6 +58,50 @@ const AddServiceProvider = () => {
     if (status.error || status.success) {
       setStatus(prev => ({ ...prev, error: '', success: false }));
     }
+  };
+
+  const handlePhotoChange = (e) => {
+    const file = e.target.files[0];
+    setPhotoError('');
+    
+    if (!file) {
+      setProfilePhoto(null);
+      setPhotoPreview(null);
+      return;
+    }
+
+    // Validate file type
+    const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png'];
+    if (!allowedTypes.includes(file.type)) {
+      setPhotoError('Please upload a JPEG or PNG image');
+      e.target.value = '';
+      return;
+    }
+
+    // Validate file size (2MB = 2 * 1024 * 1024 bytes)
+    const maxSize = 2 * 1024 * 1024;
+    if (file.size > maxSize) {
+      setPhotoError('Image size must be less than 2MB');
+      e.target.value = '';
+      return;
+    }
+
+    // Store file and create preview
+    setProfilePhoto(file);
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setPhotoPreview(reader.result);
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const removePhoto = () => {
+    setProfilePhoto(null);
+    setPhotoPreview(null);
+    setPhotoError('');
+    // Reset file input
+    const fileInput = document.getElementById('profilePhoto');
+    if (fileInput) fileInput.value = '';
   };
 
   const validateForm = () => {
@@ -112,6 +159,7 @@ const AddServiceProvider = () => {
       if (response.status >= 200 && response.status < 300) {
         setStatus({ loading: false, error: '', success: true });
         setFormData(initialFormState); // Reset form
+        removePhoto(); // Clear photo on success
       } else {
         throw new Error('Unexpected response from server');
       }
@@ -231,6 +279,46 @@ const AddServiceProvider = () => {
             required
             minLength={6}
           />
+        </div>
+        
+        <div className="flex flex-col">
+          <label className="text-sm font-medium text-gray-700 mb-1" htmlFor="profilePhoto">
+            Profile Photo
+          </label>
+          <input
+            className="border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 file:mr-4 file:py-1 file:px-3 file:rounded file:border-0 file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
+            id="profilePhoto"
+            type="file"
+            accept="image/jpeg,image/jpg,image/png"
+            onChange={handlePhotoChange}
+          />
+          <p className="text-xs text-gray-500 mt-1">
+            Accepted formats: JPEG, PNG. Max size: 2MB
+          </p>
+          
+          {photoError && (
+            <div className="mt-2 text-sm text-red-600 flex items-center gap-1">
+              <AlertCircle size={14} />
+              <span>{photoError}</span>
+            </div>
+          )}
+          
+          {photoPreview && (
+            <div className="mt-3 relative inline-block">
+              <img 
+                src={photoPreview} 
+                alt="Profile preview" 
+                className="w-32 h-32 object-cover rounded-lg border-2 border-gray-300"
+              />
+              <button
+                type="button"
+                onClick={removePhoto}
+                className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center hover:bg-red-600"
+              >
+                ×
+              </button>
+            </div>
+          )}
         </div>
         
         <div className="flex justify-end">
