@@ -7,28 +7,23 @@ namespace BACKEND.Models
     {
         [Key]
         public int ServiceProviderId { get; set; }
-        
-        public int? ServiceId { get; set; }
-        
-        [Required]
         public string FullName { get; set; }
-        
-        [Required]
-        [EmailAddress]
         public string Email { get; set; }
-        
-        [Required]
-        [Phone]
         public string Phone { get; set; }
-        
-        public int? RatingId { get; set; }
-        
+        public string PasswordHash { get; set; }
+
+        // --- FIX: Added properties to calculate and store ratings ---
+        public double AverageRating { get; set; } = 0;
+        public int TotalRatings { get; set; } = 0;
+
+        // Foreign key for Service
+        public int? ServiceId { get; set; }
         [ForeignKey("ServiceId")]
         public virtual Service Service { get; set; }
-        
-        [ForeignKey("RatingId")]
-        public virtual Rating Rating { get; set; }
 
-         public string PasswordHash { get; set; }
+        // Navigation properties
+        public virtual ICollection<ServiceRequest> ServiceRequests { get; set; }
+        public virtual ICollection<Order> Orders { get; set; }
+        public virtual ICollection<Rating> Ratings { get; set; }
     }
 }

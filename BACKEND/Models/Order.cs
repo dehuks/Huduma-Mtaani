@@ -8,24 +8,23 @@ namespace BACKEND.Models
     {
         [Key]
         public int OrderId { get; set; }
-        
-        public int? ServiceProviderId { get; set; }
-        public int? CustomerId { get; set; }
-        
-        [Required]
-        public string Status { get; set; } = "pending";
-        
-        [Required]
-        [Column(TypeName = "decimal(10,2)")]
         public decimal Amount { get; set; }
-        
-        public DateTime CreatedOn { get; set; } = DateTime.UtcNow;
-        public DateTime UpdatedOn { get; set; } = DateTime.UtcNow;
-        
-        [ForeignKey("ServiceProviderId")]
-        public virtual ServiceProvider ServiceProvider { get; set; }
-        
+        public string Status { get; set; } // e.g., "PendingPayment", "InProgress", "Completed"
+        public DateTime CreatedOn { get; set; }
+
+        // Foreign key for Customer
+        public int CustomerId { get; set; }
         [ForeignKey("CustomerId")]
         public virtual Customer Customer { get; set; }
+
+        // Foreign key for ServiceProvider
+        public int ServiceProviderId { get; set; }
+        [ForeignKey("ServiceProviderId")]
+        public virtual ServiceProvider ServiceProvider { get; set; }
+
+        // Foreign key for the originating ServiceRequest
+        public int ServiceRequestId { get; set; }
+        [ForeignKey("ServiceRequestId")]
+        public virtual ServiceRequest ServiceRequest { get; set; }
     }
 }

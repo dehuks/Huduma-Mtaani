@@ -5,18 +5,18 @@ namespace BACKEND.DTOs
     public class AdminDto
     {
         [Required]
-        public string FullName { get; set; }
+        public string FullName { get; set; } = string.Empty; // Fix: Initialized
         
         [Required]
         [EmailAddress]
-        public string Email { get; set; }
+        public string Email { get; set; } = string.Empty; // Fix: Initialized
         
         [Required]
         [Phone]
-        public string Phone { get; set; }
+        public string Phone { get; set; } = string.Empty; // Fix: Initialized
         
         [Required]
-        public string Password { get; set; }
+        public string Password { get; set; } = string.Empty; // Fix: Initialized
     }
 
     public class AdminResponseDto
