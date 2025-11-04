@@ -39,8 +39,9 @@ namespace BACKEND.Controllers
             {
                 OrderId = paymentDto.OrderId,
                 Status = "Paid",
-                PaymentDate = DateTime.UtcNow,
-                UpdatedOn = DateTime.UtcNow
+                Amount = order.Amount, // <-- FIX: Added this to store the amount
+                PaymentDate = DateTime.UtcNow
+                // UpdatedOn = DateTime.UtcNow <-- FIX: Removed this line, it's not in the model
             };
 
             _context.Payments.Add(payment);
@@ -79,8 +80,8 @@ namespace BACKEND.Controllers
             return payments.Select(p => new PaymentResponseDto
             {
                 PaymentId = p.PaymentId,
-                OrderId = p.OrderId ?? 0, // Handle potential null
-                Amount = p.Order?.Amount ?? 0,
+                OrderId = p.OrderId, // <-- FIX: Removed the unnecessary '?? 0'
+                Amount = p.Amount,   // <-- FIX: Get Amount from the Payment, not the Order
                 Status = p.Status,
                 PaymentDate = p.PaymentDate
             }).ToList();
@@ -89,7 +90,7 @@ namespace BACKEND.Controllers
         // Get all payments received by a specific service provider
         [HttpGet("service-provider/{serviceProviderId}")]
         public async Task<ActionResult<IEnumerable<PaymentResponseDto>>> GetPaymentsByServiceProvider(int serviceProviderId)
-        {
+        { // <-- FIX: Removed the stray 'L' from this line
             var payments = await _context.Payments
                 .Include(p => p.Order)
                 .Where(p => p.Order != null && p.Order.ServiceProviderId == serviceProviderId)
@@ -103,11 +104,12 @@ namespace BACKEND.Controllers
             return payments.Select(p => new PaymentResponseDto
             {
                 PaymentId = p.PaymentId,
-                OrderId = p.OrderId ?? 0, 
-                Amount = p.Order?.Amount ?? 0,
+                OrderId = p.OrderId, // <-- FIX: Removed the unnecessary '?? 0'
+                Amount = p.Amount,   // <-- FIX: Get Amount from the Payment, not the Order
                 Status = p.Status,
                 PaymentDate = p.PaymentDate
             }).ToList();
         }
     }
 }
+

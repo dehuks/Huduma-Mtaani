@@ -5,145 +5,183 @@ using BACKEND.Data;
 using BACKEND.Models;
 using BACKEND.Services;
 using Microsoft.EntityFrameworkCore;
-using System.Security.Cryptography;
-using System.Text;
+using System.Security.Claims;
+using System.Threading.Tasks;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace BACKEND.Controllers
 {
-    [Route("api/service-providers")]
+    [Route("api/provider")]
     [ApiController]
+    [Authorize(Roles = "ServiceProvider")]
     public class ServiceProviderController : ControllerBase
     {
         private readonly HudumaDbContext _context;
-        private readonly JwtService _jwtService;
 
-        public ServiceProviderController(HudumaDbContext context, JwtService jwtService)
+        public ServiceProviderController(HudumaDbContext context)
         {
             _context = context;
-            _jwtService = jwtService;
         }
 
-        // Create Service Provider
-        [HttpPost("create")]
-        [Authorize(Roles = "Admin")] // Only admin can register service providers
-        public async Task<ActionResult<Models.ServiceProvider>> CreateServiceProvider(ServiceProviderDto serviceProviderDto)
+        // NOTE: Profile management (GET /me, PUT /me) is handled by AuthController.
+        
+        // --- 1. Service Request Management (NEW) ---
+
+        [HttpGet("pending-requests")]
+        public async Task<ActionResult<IEnumerable<object>>> GetMyPendingRequests()
         {
-            if (await _context.ServiceProviders.AnyAsync(sp => sp.Email == serviceProviderDto.Email))
-            {
-                return BadRequest("Email already exists");
-            }
+            var providerId = GetAuthenticatedProviderId();
 
-            // Hash password before storing
-            string passwordHash = HashPassword(serviceProviderDto.Password);
-
-            var serviceProvider = new Models.ServiceProvider
-            {
-                ServiceId = serviceProviderDto.ServiceId,
-                FullName = serviceProviderDto.FullName,
-                Email = serviceProviderDto.Email,
-                Phone = serviceProviderDto.Phone,
-                RatingId = serviceProviderDto.RatingId,
-                PasswordHash = passwordHash
-            };
-
-            _context.ServiceProviders.Add(serviceProvider);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction(nameof(GetServiceProviderById), new { serviceProviderId = serviceProvider.ServiceProviderId }, serviceProvider);
-        }
-
-        // Get All Service Providers
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Models.ServiceProvider>>> GetAllServiceProviders()
-        {
-            return await _context.ServiceProviders.ToListAsync();
-        }
-
-        // Get Service Provider by ID
-        [HttpGet("{serviceProviderId}")]
-        public async Task<ActionResult<Models.ServiceProvider>> GetServiceProviderById(int serviceProviderId)
-        {
-            var serviceProvider = await _context.ServiceProviders.FindAsync(serviceProviderId);
-
-            if (serviceProvider == null)
-            {
-                return NotFound();
-            }
-
-            return serviceProvider;
-        }
-
-        // Get Service Providers by Service ID
-        [HttpGet("service/{serviceId}")]
-        public async Task<ActionResult<IEnumerable<Models.ServiceProvider>>> GetServiceProvidersByServiceId(int serviceId)
-        {
-            var serviceProviders = await _context.ServiceProviders
-                .Where(sp => sp.ServiceId == serviceId)
+            var requests = await _context.ServiceRequests
+                .Where(sr => sr.ServiceProviderId == providerId && sr.Status == "PendingProvider")
+                .OrderByDescending(sr => sr.RequestedDate)
+                .Select(sr => new { 
+                    sr.ServiceRequestId,
+                    sr.Description,
+                    sr.Status,
+                    sr.RequestedDate,
+                    Service = sr.Service.ServiceName,
+                    Customer = new { sr.Customer.CustomerName, sr.Customer.Phone }
+                })
                 .ToListAsync();
 
-            if (!serviceProviders.Any())
-            {
-                return NotFound("No service providers found for this service.");
-            }
-
-            return serviceProviders;
+            return Ok(requests);
         }
 
-        // Update Service Provider
-        [HttpPut("{serviceProviderId}")]
-        [Authorize(Roles = "Admin, ServiceProvider")]
-        public async Task<IActionResult> UpdateServiceProvider(int serviceProviderId, ServiceProviderDto serviceProviderDto)
+        [HttpPatch("service-requests/{id}/respond")]
+        public async Task<IActionResult> RespondToServiceRequest(int id, [FromBody] ProviderRespondDto respondDto)
         {
-            var serviceProvider = await _context.ServiceProviders.FindAsync(serviceProviderId);
+            var providerId = GetAuthenticatedProviderId();
+            
+            var request = await _context.ServiceRequests.FindAsync(id);
+            if (request == null) return NotFound(new { message = "Request not found" });
+            
+            if (request.ServiceProviderId != providerId) return Forbid();
 
-            if (serviceProvider == null)
+            if (request.Status != "PendingProvider")
             {
-                return NotFound();
+                return BadRequest(new { message = "This request has already been actioned." });
             }
 
-            serviceProvider.FullName = serviceProviderDto.FullName;
-            serviceProvider.Email = serviceProviderDto.Email;
-            serviceProvider.Phone = serviceProviderDto.Phone;
-            serviceProvider.ServiceId = serviceProviderDto.ServiceId;
-            serviceProvider.RatingId = serviceProviderDto.RatingId;
-
-            // Update password if provided
-            if (!string.IsNullOrEmpty(serviceProviderDto.Password))
+            if (respondDto.Accept)
             {
-                serviceProvider.PasswordHash = HashPassword(serviceProviderDto.Password);
+                request.Status = "ProviderAccepted";
+                // TODO: Notify customer their request was accepted
+            }
+            else
+            {
+                request.Status = "ProviderRejected";
+                // TODO: Notify customer their request was rejected
+            }
+            
+            await _context.SaveChangesAsync();
+            return Ok(new { message = $"Request has been {request.Status}" });
+        }
+    
+
+        // --- 2. Order Management ---
+        
+        [HttpGet("my-orders")]
+        public async Task<ActionResult<IEnumerable<OrderResponseDto>>> GetMyOrders()
+        {
+            var providerId = GetAuthenticatedProviderId();
+
+            var orders = await _context.Orders
+                .Where(o => o.ServiceProviderId == providerId)
+                .OrderByDescending(o => o.CreatedOn)
+                .Select(o => new OrderResponseDto
+                {
+                    OrderId = o.OrderId,
+                    Status = o.Status,
+                    Amount = o.Amount,
+                    CreatedOn = o.CreatedOn
+                })
+                .ToListAsync();
+            
+            return Ok(orders);
+        }
+
+        [HttpPatch("orders/{orderId}/status")]
+        public async Task<IActionResult> UpdateOrderStatus(int orderId, [FromBody] UpdateOrderStatusDto statusDto)
+        {
+            var providerId = GetAuthenticatedProviderId();
+
+            var order = await _context.Orders.FindAsync(orderId);
+            if (order == null)
+            {
+                return NotFound(new { message = "Order not found" });
+            }
+
+            if (order.ServiceProviderId != providerId)
+            {
+                return Forbid(); 
+            }
+
+            var newStatus = statusDto.Status.ToLower();
+            
+            // Simplified status flow:
+            // PaymentConfirmed -> InProgress -> Completed
+            if (order.Status == "PaymentConfirmed" && newStatus == "inprogress")
+            {
+                 order.Status = "InProgress";
+            }
+            else if (order.Status == "InProgress" && newStatus == "completed")
+            {
+                order.Status = "Completed";
+            }
+            else
+            {
+                 return BadRequest(new { message = $"Cannot change status from '{order.Status}' to '{newStatus}'." });
             }
 
             await _context.SaveChangesAsync();
 
-            return NoContent();
+            return Ok(new { message = "Order status updated successfully", order.Status });
         }
 
-        // Delete Service Provider
-        [HttpDelete("{serviceProviderId}")]
-        [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> DeleteServiceProvider(int serviceProviderId)
+
+        // --- 3. Rating & Feedback ---
+
+        [HttpGet("my-ratings")]
+        public async Task<ActionResult<IEnumerable<object>>> GetMyRatings()
         {
-            var serviceProvider = await _context.ServiceProviders.FindAsync(serviceProviderId);
+            var providerId = GetAuthenticatedProviderId();
 
-            if (serviceProvider == null)
-            {
-                return NotFound();
-            }
+            var ratings = await _context.Ratings
+                .Where(r => r.ServiceProviderId == providerId)
+                .OrderByDescending(r => r.RatedOn)
+                .Select(r => new 
+                {
+                    r.Rate,
+                    r.Review,
+                    r.RatedOn,
+                    CustomerName = r.Customer.CustomerName,
+                    Service = r.Order.ServiceRequest.Service.ServiceName
+                })
+                .ToListAsync();
 
-            _context.ServiceProviders.Remove(serviceProvider);
-            await _context.SaveChangesAsync();
+            var average = await _context.Ratings
+                .Where(r => r.ServiceProviderId == providerId)
+                .AverageAsync(r => (double?)r.Rate) ?? 0; 
 
-            return NoContent();
+            return Ok(new {
+                AverageRating = average,
+                Ratings = ratings
+            });
         }
 
-        // Password Hashing Method
-        private string HashPassword(string password)
+
+        // --- Helper Methods ---
+
+        private int GetAuthenticatedProviderId()
         {
-            using (var sha256 = SHA256.Create())
+            var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier);
+            if (userIdClaim == null)
             {
-                var hashedBytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(password));
-                return Convert.ToBase64String(hashedBytes);
+                throw new UnauthorizedAccessException("User ID not found in token.");
             }
+            return int.Parse(userIdClaim.Value);
         }
     }
 }

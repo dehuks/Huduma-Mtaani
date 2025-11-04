@@ -1,3 +1,5 @@
+using System.ComponentModel.DataAnnotations;
+
 namespace BACKEND.DTOs
 {
     public class ServiceDto
@@ -6,10 +8,20 @@ namespace BACKEND.DTOs
         public string ServiceDescription { get; set; }
     }
 
-    public class PaymentDto
+     public class PaymentDto
     {
+        [Required]
         public int OrderId { get; set; }
+
+        [Required]
         public string Status { get; set; }
+        
+        [Required]
+        public decimal Amount { get; set; } // FIX: Added Amount
+        
+        public string PaymentMethod { get; set; } // e.g., "MobileMoney"
+        
+        public string TransactionId { get; set; } // From payment provider
     }
 
      public class PaymentResponseDto
@@ -23,7 +35,13 @@ namespace BACKEND.DTOs
 
     public class RatingDto
     {
-        public int CustomerId { get; set; }
+        [Required]
+        [Range(1, 5)]
         public int Rate { get; set; }
+
+        [Required]
+        public int OrderId { get; set; } // FIX: Added OrderId
+
+        public string Review { get; set; } // FIX: Added Review
     }
 }
